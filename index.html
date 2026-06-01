@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Database Schema Testing Hub</title>
+    <style>
+        /* Premium Matte Dark Aesthetics */
+        :root {
+            --bg-main: #0a0a0c;
+            --bg-card: #121215;
+            --bg-nested: #1a1a1f;
+            --border-color: #26262b;
+            --text-main: #e4e4e7;
+            --text-muted: #a1a1aa;
+            --accent-primary: #6366f1;
+            --accent-success: #10b981;
+            --accent-error: #f43f5e;
+            --accent-warning: #f59e0b;
+            --font-stack: 'Mona Sans', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-stack);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            letter-spacing: -0.01em;
+        }
+
+        .workspace {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header Dashboard Layout */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .header-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        .badge-system {
+            display: flex;
+            gap: 15px;
+        }
+
+        .badge {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .badge span {
+            color: var(--accent-primary);
+        }
+
+        /* Section Layouts */
+        .section-headline {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 40px 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-headline::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            background-color: var(--accent-primary);
+            border-radius: 2px;
+        }
+
+        /* Grid Frameworks */
+        .grid-two-col {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 992px) {
+            .grid-two-col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Interactive Dissector Lab Styling */
+        .lab-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .lab-container {
+                grid-template-columns: 320px 1fr;
+            }
+        }
+
+        .lab-sidebar {
+            background-color: #0e0e11;
+            border-right: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 550px;
+            overflow-y: auto;
+        }
+
+        .tc-item {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .tc-item:hover {
+            border-color: #4b4b52;
+            background-color: var(--bg-nested);
+        }
+
+        .tc-item.active {
+            border-color: var(--accent-primary);
+            background-color: rgba(99, 102, 241, 0.08);
+        }
+
+        .tc-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .tc-item-id {
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--accent-error);
+            font-size: 0.85rem;
+        }
+
+        .tc-item-priority {
+            font-size: 0.75rem;
+            background-color: #242429;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--text-muted);
+        }
+
+        .tc-item-title {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lab-view {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .view-header h3 {
+            margin: 0 0 10px 0;
+            color: #ffffff;
+            font-size: 1.3rem;
+        }
+
+        .view-header p {
+            color: var(--text-muted);
+            margin: 0 0 25px 0;
+            font-size: 0.95rem;
+        }
+
+        /* SQL Block Component Highlighter */
+        .sql-display-box {
+            background-color: #08080a;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .sql-interactive-line {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .sql-token {
+            padding: 4px 8px;
+            border-radius: 4px;
+            background-color: var(--bg-nested);
+            border: 1px solid transparent;
+            cursor: help;
+            transition: all 0.2s ease;
+        }
+
+        .sql-token:hover {
+            border-color: var(--accent-primary);
+            background-color: #22222a;
+        }
+
+        .token-keyword { color: #f43f5e; }
+        .token-field { color: #60a5fa; }
+        .token-schema { color: #a7f3d0; }
+        .token-string { color: #f59e0b; }
+
+        .explanation-card {
+            background-color: var(--bg-nested);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .explanation-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.95rem;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .explanation-card p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        /* Game Arena Layout */
+        .game-panel {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .game-meta-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .game-stats-cluster {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-node {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .stat-node strong {
+            color: #ffffff;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 4px;
+            background-color: var(--bg-nested);
+            border-radius: 2px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 10%;
+            background-color: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .game-prompt {
+            font-size: 1.15rem;
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: 25px;
+            min-height: 55px;
+        }
+
+        .game-options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .game-opt-btn {
+            background-color: var(--bg-nested);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .game-opt-btn:hover {
+            border-color: #4b4b52;
+            background-color: #22222a;
+        }
+
+        /* Virtual Terminal Simulator */
+        .virtual-terminal {
+            background-color: #050507;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .terminal-topbar {
+            color: #52525b;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 1px solid #18181b;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .terminal-log {
+            font-size: 0.9rem;
+            margin: 4px 0;
+            white-space: pre-wrap;
+        }
+
+        .term-input-line { color: var(--accent-primary); }
+        .term-output-line { color: var(--accent-success); margin-left: 15px; }
+
+        .action-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .primary-action-btn {
+            background-color: var(--accent-primary);
+            color: #ffffff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .primary-action-btn:hover {
+            background-color: #4f46e5;
+        }
+
+        /* Fundamentals Card Blocks */
+        .core-concept-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .core-concept-card h3 {
+            color: #ffffff;
+            margin-top: 0;
+            font-size: 1.15rem;
+            margin-bottom: 12px;
+        }
+
+        .core-concept-card p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="workspace">
+        
+        <header class="dashboard-header">
+            <div class="header-title">
+                <h1>QA Schema Testing Engine</h1>
+                <p>Interactive verification suite for metadata structural automation architecture.</p>
+            </div>
+            <div class="badge-system">
+                <div class="badge">Rank: <span id="user-rank">Novice QA</span></div>
+                <div class="badge">Global Accuracy: <span id="accuracy-stat">0%</span></div>
+            </div>
+        </header>
+
+        <h2 class="section-headline">1. Structural Testing Core Definitions</h2>
+        <div class="grid-two-col" style="margin-bottom: 40px;">
+            <div class="core-concept-card">
+                <h3>The Schema Definition</h3>
+                <p>In automation and manual validation, a schema test checks the rules and layout properties of the table containers rather than looking at data records. This protects application code from crashing due to modified columns or broken datatypes during continuous deployments.</p>
+            </div>
+            <div class="core-concept-card">
+                <h3>The Information Schema Mirror</h3>
+                <p>Modern relational engines mount an accessible dictionary platform called <code>information_schema</code>. This directory can be monitored using direct read-only queries to assert names, type formatting constraints, capacity constraints, and key assignments dynamically within assertions.</p>
+            </div>
+        </div>
+
+        <h2 class="section-headline">2. Interactive Query Dissector Laboratory</h2>
+        <p style="color: var(--text-muted); margin-top: -10px; margin-bottom: 20px; font-size: 0.95rem;">Select a Test Case from the panel to extract the query. Hover/click query tokens below to analyze structure execution properties.</p>
+        
+        <div class="lab-container">
+            <div class="lab-sidebar" id="lab-sidebar-target">
+                </div>
+
+            <div class="lab-view">
+                <div class="view-header">
+                    <h3 id="lab-title">Loading Schema Target...</h3>
+                    <p id="lab-desc">Select an available scenario token from the sidebar to inspect structural components.</p>
+                    
+                    <div class="sql-display-box">
+                        <div class="sql-interactive-line" id="sql-token-target">
+                            </div>
+                    </div>
+                </div>
+
+                <div class="explanation-card">
+                    <h4 id="exp-title">Component Breakdown Analysis</h4>
+                    <p id="exp-body">Select or hover over any highlighted segment of the query above to review structural context assignments.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-headline">3. Interactive 10-Stage QA Sandbox Arena</h2>
+        
+        <div class="grid-two-col">
+            <div class="game-panel">
+                <div>
+                    <div class="game-meta-bar">
+                        <div class="stat-node">Stage: <strong id="game-stage-num">1</strong> of 10</div>
+                        <div class="game-stats-cluster">
+                            <div class="stat-node">Streak: <strong id="game-streak">0</strong></div>
+                            <div class="stat-node">Score: <strong id="game-score">0</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-track">
+                        <div class="progress-bar-fill" id="game-progress-fill"></div>
+                    </div>
+
+                    <div class="game-prompt" id="game-prompt-target">
+                        Loading verification target scenario...
+                    </div>
+
+                    <div class="game-options-grid" id="game-options-target">
+                        </div>
+                </div>
+
+                <div class="action-container">
+                    <button class="primary-action-btn" id="game-next-btn" onclick="triggerNextGameStep()">Advance Verification Run</button>
+                </div>
+            </div>
+
+            <div class="virtual-terminal">
+                <div class="terminal-topbar">Live Sandbox DB Result Output Log</div>
+                <div id="terminal-log-target" style="flex-grow: 1;">
+                    <div class="terminal-log"><span class="term-input-line">QA-Terminal$</span> pipeline operational. awaiting instructions...</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // MASTER TEST CASE SCHEMA DATABASE DATA
+        const schemaTestCases = [
+            {
+                id: "TC001",
+                title: "Check table presence in database schema",
+                desc: "Validates that the target table structure exists within the active catalog workspace instance before invoking data transactions.",
+                priority: "P1",
+                tokens: [
+                    { text: "SHOW", type: "keyword", desc: "Command instruction that requests the engine to print a list of active schema structures." },
+                    { text: "TABLES;", type: "keyword", desc: "Specifies that the list returned must strictly consist of data tables within the current active database context." }
+                ]
+            },
+            {
+                id: "TC002",
+                title: "Check table name conventions",
+                desc: "Verifies whether structural table identifiers conform to style guide protocols, checking for illegal character spacing or word counts.",
+                priority: "P1",
+                tokens: [
+                    { text: "SHOW", type: "keyword", desc: "Asks the engine to read and surface metadata structures." },
+                    { text: "TABLES;", type: "keyword", desc: "Outputs the visible collection names so the QA tester can verify that no spaces or illegal upper-case characters exist." }
+                ]
+            },
+            {
+                id: "TC003",
+                title: "Check number of columns in a table",
+                desc: "Asserts that the aggregate column declaration count matches architecture specifications exactly (expecting 13 columns total).",
+                priority: "P1",
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Command instructing the database engine to retrieve data fields." },
+                    { text: "COUNT(*)", type: "field", desc: "An aggregate counting function that adds up every single record match discovered in the metadata." },
+                    { text: "AS NumberOfColumns", type: "field", desc: "Renames the returned column block temporarily to make your testing reports clean and human-readable." },
+                    { text: "FROM", type: "keyword", desc: "Points toward the specific data table configuration where this metadata information lives." },
+                    { text: "information_schema.columns", type: "schema", desc: "The internal engine master table dictionary tracking structural properties for all columns system-wide." },
+                    { text: "WHERE", type: "keyword", desc: "Filters down the search query so you don't load data for irrelevant structures." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Restricts the search scope so it only checks attributes linked to your target table configuration named 'customers'." }
+                ]
+            },
+            {
+                id: "TC004",
+                title: "Check column names in a table",
+                desc: "Extracts literal column string labels to verify they sync with system engineering database requirements documentation.",
+                priority: "P1",
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Requests a readout of specified data points." },
+                    { text: "column_name", type: "field", desc: "Target column attribute that isolates and pulls the actual text name of each table header." },
+                    { text: "FROM", type: "keyword", desc: "Points to the storage engine system location." },
+                    { text: "information_schema.columns", type: "schema", desc: "The master structural column logging table." },
+                    { text: "WHERE", type: "keyword", desc: "Initializes structural filtration limits." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Isolates validation metadata strictly down to the 'customers' table entity layout context." }
+                ]
+            },
+            {
+                id: "TC005",
+                title: "Check data type of columns in table",
+                desc: "Confirms structural datatypes match field definitions (e.g. verifying IDs are integers and names are text strings).",
+                priority: "P1",
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Initiates fields retrieval pipeline extraction." },
+                    { text: "column_name,", type: "field", desc: "Pulls the literal name of the column header attribute." },
+                    { text: "data_type", type: "field", desc: "Pulls the structural classification label assigned to the field (like integer, decimal, or varchar text)." },
+                    { text: "FROM", type: "keyword", desc: "Target directory specification clause." },
+                    { text: "information_schema.columns", type: "schema", desc: "The embedded engine metadata directory tracking parameters." },
+                    { text: "WHERE", type: "keyword", desc: "Conditional row matching directive." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Locks downstream assessment down to parameters containing the 'customers' layout reference." }
+                ]
+            },
+            {
+                id: "TC006",
+                title: "Check size of the columns in a table",
+                desc: "Evaluates exact storage allocations and text array boundary lengths configured across elements to guard against memory truncation bugs.",
+                priority: "P1",
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Queries matching dictionary lines." },
+                    { text: "column_name,", type: "field", desc: "Fetches specific individual column labels." },
+                    { text: "column_type", type: "field", desc: "Pulls the detailed datatype structure format alongside its max character limits (example: showing varchar(255) explicitly)." },
+                    { text: "FROM", type: "keyword", desc: "Metadata index pathway router statement." },
+                    { text: "information_schema.columns", type: "schema", desc: "Internal reference framework indexing available properties." },
+                    { text: "WHERE", type: "keyword", desc: "Row limit application check context." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Locks inspection context down to parameters containing the 'customers' table configuration signature." }
+                ]
+            },
+            {
+                id: "TC007",
+                title: "Check nulls fields in a table",
+                desc: "Verifies nullable parameters across configurations to ensure critical fields cannot be written as blank entries during operational updates.",
+                priority: "P1",
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Triggers properties reading sequence instructions." },
+                    { text: "column_name,", type: "field", desc: "Identifies unique field elements inside targets." },
+                    { text: "is_nullable", type: "field", desc: "Pulls structural configuration flag indicating if a field handles empty values (YES) or rejects blanks (NO)." },
+                    { text: "FROM", type: "keyword", desc: "Directs engine lookup parameters layout schema." },
+                    { text: "information_schema.columns", type: "schema", desc: "Global data schema parameters mapping asset tracker." },
+                    { text: "WHERE", type: "keyword", desc: "Logical filter baseline marker." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Binds operational validation down to parameters matching the 'customers' structure metadata profile." }
+                ]
+            },
+            {
+                id: "TC008",
+                title: "Check column keys in a table",
+                desc: "Examines architectural indices across elements to verify primary key or unique key configurations are present.",
+                priority: "P1",
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Executes properties collection readout process." },
+                    { text: "column_name,", type: "field", desc: "Targets targeted attribute key label strings." },
+                    { text: "column_key", type: "field", desc: "Exposes system constraint indexing classifications (such as displaying PRI for primary system keys)." },
+                    { text: "FROM", type: "keyword", desc: "Specifies engine catalog routing logic directions." },
+                    { text: "information_schema.columns", type: "schema", desc: "Internal platform dictionary logging field parameters values." },
+                    { text: "WHERE", type: "keyword", desc: "Structural limit evaluation statement wrapper." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Binds execution parameters down to metadata properties containing the 'customers' layout context signature." }
+                ]
+            }
+        ];
+
+        // 10-STAGE EXTENDED EXPANDED GAME DATA
+        const arenaQuestions = [
+            {
+                q: "Your validation suite must assert that the database contains an active table layout called 'orders'. Which query maps to checking general table presence context?",
+                options: ["SELECT * FROM information_schema.tables;", "SHOW TABLES;", "SELECT column_name FROM information_schema.columns;"],
+                correct: 1,
+                cmd: "SHOW TABLES;",
+                out: "+-------------------+\n| Tables_in_sandbox |\n+-------------------+\n| customers         |\n| orders            |\n+-------------------+"
+            },
+            {
+                q: "A P1 architecture rule states that table names must be completely in lowercase with no special characters. Which command pulls the names list to execute this check?",
+                options: ["SELECT schema_name FROM information_schema.schemata;", "SHOW TABLES;", "DESCRIBE customers;"],
+                correct: 1,
+                cmd: "SHOW TABLES;",
+                out: "+-------------------+\n| Tables_in_sandbox |\n+-------------------+\n| customers         |\n| orders            |\n+-------------------+"
+            },
+            {
+                q: "You are setting up an assertion confirming that a migration script successfully injected exactly 13 columns into the 'customers' schema structure. Which query returns this total integer count?",
+                options: ["SELECT COUNT(*) AS NumberOfColumns FROM information_schema.columns WHERE table_name = 'customers';", "SELECT SUM(columns) FROM information_schema.tables;", "SHOW COLUMNS FROM customers;"],
+                correct: 0,
+                cmd: "SELECT COUNT(*) AS NumberOfColumns FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-----------------+\n| NumberOfColumns |\n+-----------------+\n|              13 |\n+-----------------+"
+            },
+            {
+                q: "You need to confirm that an update script correctly renamed a column from 'usr_phone' to 'phone_number'. Which framework instruction extracts literal naming configurations?",
+                options: ["SHOW SCHEMA NAMES;", "SELECT column_name FROM information_schema.columns WHERE table_name = 'customers';", "SELECT * FROM customers;"],
+                correct: 1,
+                cmd: "SELECT column_name FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-----------------+\n| column_name     |\n+-----------------+\n| customer_id     |\n| email           |\n| phone_number    |\n+-----------------+"
+            },
+            {
+                q: "A data truncation issue is corrupted user strings because the 'email' input column is configured as an integer instead of a character array. Which query evaluates structural column data classifications?",
+                options: ["SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'customers';", "SELECT data_type FROM customers;", "SHOW DATA_TYPES;"],
+                correct: 0,
+                cmd: "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-------------+-----------+\n| column_name | data_type |\n+-------------+-----------+\n| customer_id | int       |\n| email       | varchar   |\n+-------------+-----------+"
+            },
+            {
+                q: "Your spec states that the 'first_name' string container must accommodate exactly 255 maximum characters. Which query tracks explicit structural sizing parameters alongside types data?",
+                options: ["SELECT length FROM customers;", "SELECT column_name, column_type FROM information_schema.columns WHERE table_name = 'customers';", "SHOW MAX_LENGTH;"],
+                correct: 1,
+                cmd: "SELECT column_name, column_type FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-------------+--------------+\n| column_name | column_type  |\n+-------------+--------------+\n| first_name  | varchar(255) |\n+-------------+--------------+"
+            },
+            {
+                q: "An automation pipeline failure is tracked down to an identity field accepting null/blank records when it shouldn't. Which query isolates column nullable status parameters?",
+                options: ["SELECT column_name, is_nullable FROM information_schema.columns WHERE table_name = 'customers';", "SHOW EMPTY FIELDS FROM customers;", "SELECT null_status FROM information_schema.tables;"],
+                correct: 0,
+                cmd: "SELECT column_name, is_nullable FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-------------+-------------+\n| column_name | is_nullable |\n+-------------+-------------+\n| customer_id | NO          |\n| middle_name | YES         |\n+-------------+-------------+"
+            },
+            {
+                q: "You want to dynamically ensure that a developer designated 'customer_id' as the targeted operational Primary Key within the indexing architecture. Which dictionary attribute extracts this data?",
+                options: ["SELECT key_type FROM customers;", "SHOW ALL KEYS;", "SELECT column_name, column_key FROM information_schema.columns WHERE table_name = 'customers';"],
+                correct: 2,
+                cmd: "SELECT column_name, column_key FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-------------+------------+\n| column_name | column_key |\n+-------------+------------+\n| customer_id | PRI        |\n| email       | UNI        |\n+-------------+------------+"
+            },
+            {
+                q: "Why is the statement segment `WHERE table_name = 'customers'` critical inside automation framework assertions pointing at internal infrastructure columns dictionaries?",
+                options: ["It dynamically writes test datasets records inside tables variables models workspace.", "It safely isolates mapping lookups to match only structure data tied to that unique system container entry.", "It deletes structural properties linked to conflicting workspace databases configurations items."],
+                correct: 1,
+                cmd: "-- Structural isolation check --",
+                out: "Engine isolated scope matching rule: table_name structural constraints confirmed."
+            },
+            {
+                q: "What component system does `information_schema` serve as within modern relational systems architecture validations spaces?",
+                options: ["An analytical system storage cluster handling external log parameters backups lists.", "An automated runtime data cache serving user account registration details views.", "A read-only configuration blueprint detailing current metadata definitions rules parameters."],
+                correct: 2,
+                cmd: "-- Complete Audit Verified --",
+                out: "System Schema Audit Sequence: Operational Stability Verified (100% Core Standards Met)."
+            }
+        ];
+
+        // LOGIC LAB ENGINE STATES
+        let currentActiveLabIndex = 0;
+        let gameStageIdx = 0;
+        let gameScore = 0;
+        let gameStreak = 0;
+        let runningAnswersCount = 0;
+        let runningCorrectCount = 0;
+
+        // LAB ENGINE FUNCTIONS
+        function initializeLabStudio() {
+            const sidebarTarget = document.getElementById("lab-sidebar-target");
+            sidebarTarget.innerHTML = "";
+
+            schemaTestCases.forEach((tc, idx) => {
+                const element = document.createElement("button");
+                element.className = `tc-item ${idx === currentActiveLabIndex ? 'active' : ''}`;
+                element.onclick = () => mountLabTestCase(idx);
+                element.innerHTML = `
+                    <div class="tc-item-header">
+                        <span class="tc-item-id">${tc.id}</span>
+                        <span class="tc-item-priority">${tc.priority}</span>
+                    </div>
+                    <div class="tc-item-title">${tc.title}</div>
+                `;
+                sidebarTarget.appendChild(element);
+            });
+
+            mountLabTestCase(currentActiveLabIndex);
+        }
+
+        function mountLabTestCase(index) {
+            currentActiveLabIndex = index;
+            
+            // Re-render sidebar active tokens states
+            const items = document.querySelectorAll(".tc-item");
+            items.forEach((item, idx) => {
+                if(idx === index) item.classList.add("active");
+                else item.classList.remove("active");
+            });
+
+            const targetCase = schemaTestCases[index];
+            document.getElementById("lab-title").innerText = `${targetCase.id}: ${targetCase.title}`;
+            document.getElementById("lab-desc").innerText = targetCase.desc;
+
+            // Mount SQL Token Blocks
+            const tokensTarget = document.getElementById("sql-token-target");
+            tokensTarget.innerHTML = "";
+
+            targetCase.tokens.forEach(tok => {
+                const tokenNode = document.createElement("span");
+                tokenNode.className = `sql-token token-${tok.type}`;
+                tokenNode.innerText = tok.text;
+                tokenNode.onmouseover = () => updateTokenExplainer(tok.text, tok.desc);
+                tokenNode.onclick = () => updateTokenExplainer(tok.text, tok.desc);
+                tokensTarget.appendChild(tokenNode);
+            });
+
+            // Set initial token explainer state
+            updateTokenExplainer(targetCase.tokens[0].text, targetCase.tokens[0].desc);
+        }
+
+        function updateTokenExplainer(title, systemDescription) {
+            document.getElementById("exp-title").innerText = `Token Resource: ${title}`;
+            document.getElementById("exp-body").innerText = systemDescription;
+        }
+
+        // SANDBOX GAME ARENA ENGINE LOGIC
+        function loadGameStage() {
+            document.getElementById("game-next-btn").style.display = "none";
+            const dataNode = arenaQuestions[gameStageIdx];
+            
+            document.getElementById("game-stage-num").innerText = gameStageIdx + 1;
+            document.getElementById("game-progress-fill").style.width = `${((gameStageIdx + 1) / arenaQuestions.length) * 100}%`;
+            document.getElementById("game-prompt-target").innerText = dataNode.q;
+
+            const optionsTarget = document.getElementById("game-options-target");
+            optionsTarget.innerHTML = "";
+
+            dataNode.options.forEach((opt, idx) => {
+                const choiceBtn = document.createElement("button");
+                choiceBtn.className = "game-opt-btn";
+                choiceBtn.innerText = opt;
+                choiceBtn.onclick = () => processGameAnswer(idx, choiceBtn);
+                optionsTarget.appendChild(choiceBtn);
+            });
+        }
+
+        function processGameAnswer(userChoiceIdx, interfaceButton) {
+            const currentQuestion = arenaQuestions[gameStageIdx];
+            const choicesButtons = document.querySelectorAll(".game-opt-btn");
+            
+            // Lock active selection nodes instantly
+            choicesButtons.forEach(btn => btn.disabled = true);
+
+            runningAnswersCount++;
+
+            // Inject current query logs to simulation pane
+            const consoleLogTarget = document.getElementById("terminal-log-target");
+            consoleLogTarget.innerHTML = `
+                <div class="terminal-log"><span class="term-input-line">QA-Terminal$</span> ${currentQuestion.cmd}</div>
+                <div class="terminal-log term-output-line">${currentQuestion.out}</div>
+            `;
+
+            if(userChoiceIdx === currentQuestion.correct) {
+                gameScore += 100 + (gameStreak * 20);
+                gameStreak++;
+                runningCorrectCount++;
+                
+                interfaceButton.style.borderColor = varCssAccessor('--accent-success');
+                interfaceButton.style.backgroundColor = "rgba(16, 185, 129, 0.1)";
+                
+                consoleLogTarget.innerHTML += `<div class="terminal-log" style="color: var(--accent-success);">[SUCCESS]: Verification standard parameters assertion passed successfully.</div>`;
+            } else {
+                gameStreak = 0;
+                interfaceButton.style.borderColor = varCssAccessor('--accent-error');
+                interfaceButton.style.backgroundColor = "rgba(244, 63, 94, 0.1)";
+                
+                consoleLogTarget.innerHTML += `<div class="terminal-log" style="color: var(--accent-error);">[FAILURE]: Assert evaluation broken. Schema alignment structure missing.</div>`;
+            }
+
+            // Update stats layout components metrics
+            document.getElementById("game-score").innerText = gameScore;
+            document.getElementById("game-streak").innerText = gameStreak;
+            document.getElementById("accuracy-stat").innerText = `${Math.round((runningCorrectCount / runningAnswersCount) * 100)}%`;
+            
+            updateDynamicRankTitle();
+
+            document.getElementById("game-next-btn").style.display = "block";
+        }
+
+        function triggerNextGameStep() {
+            gameStageIdx++;
+            if(gameStageIdx < arenaQuestions.length) {
+                loadGameStage();
+            } else {
+                // Terminate deployment sequence assessment run successfully
+                document.getElementById("game-prompt-target").innerText = "Database Automated Framework Integration Quest Completed.";
+                document.getElementById("game-options-target").innerHTML = `
+                    <div style="padding: 20px; border-radius: 8px; background-color: rgba(16, 185, 129, 0.05); border: 1px dashed var(--accent-success); color: #ffffff;">
+                        Final Evaluation Run Analytics: Total Verified Points Score tracked at ${gameScore} units. Review token structure components maps above to maintain precision metrics.
+                    </div>
+                `;
+                document.getElementById("game-next-btn").style.display = "none";
+            }
+        }
+
+        function updateDynamicRankTitle() {
+            let activeRank = "Novice QA";
+            if (gameScore >= 800) activeRank = "Metadata Automation Lead";
+            else if (gameScore >= 500) activeRank = "Senior Schema Auditor";
+            else if (gameScore >= 200) activeRank = "SQL Systems Inspector";
+            
+            document.getElementById("user-rank").innerText = activeRank;
+        }
+
+        function varCssAccessor(variableStringName) {
+            return getComputedStyle(document.documentElement).getPropertyValue(variableStringName).trim();
+        }
+
+        // ENTRY HOOK WINDOW LOAD INITIALIZATION RUNS
+        window.onload = () => {
+            initializeLabStudio();
+            loadGameStage();
+        };
+    </script>
+</body>
+</html>
