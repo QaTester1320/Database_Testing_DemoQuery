@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL Detective Lab - Learn Database Testing Fun Way</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#0d1020;
+      --bg2:#111d3d;
+      --card:rgba(18,26,56,.84);
+      --card2:rgba(255,255,255,.06);
+      --text:#f4f8ff;
+      --muted:#c5d0f0;
+      --accent:#8b5cf6;
+      --accent2:#22c55e;
+      --accent3:#06b6d4;
+      --accent4:#f59e0b;
+      --danger:#ff6b6b;
+      --ok:#4ade80;
+      --shadow:0 18px 60px rgba(0,0,0,.35);
+      --radius:28px;
+      --line:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:'Inter',sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,246,.25), transparent 24%),
+        radial-gradient(circle at top right, rgba(6,182,212,.20), transparent 22%),
+        radial-gradient(circle at bottom left, rgba(245,158,11,.14), transparent 24%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+    }
+    .wrap{width:min(1240px, calc(100% - 30px)); margin:0 auto; padding:18px 0 60px}
+    .sticky{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter:blur(14px);
+      background:rgba(10,14,30,.65);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav{
+      width:min(1240px, calc(100% - 30px));
+      margin:0 auto;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:14px 0;
+      gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-family:'Baloo 2', cursive;
+      font-weight:800;
+      font-size:1.25rem;
+    }
+    .logo{
+      width:42px; height:42px; border-radius:14px;
+      display:grid; place-items:center;
+      background:linear-gradient(135deg, var(--accent), var(--accent3));
+      box-shadow:0 10px 25px rgba(6,182,212,.25);
+      font-size:1.2rem;
+    }
+    .navlinks{display:flex; flex-wrap:wrap; gap:8px}
+    .navlinks a{
+      color:var(--text); text-decoration:none;
+      padding:10px 14px; border-radius:999px;
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08);
+      font-weight:700; font-size:.95rem;
+    }
+
+    .hero{
+      margin-top:22px;
+      border:1px solid var(--line);
+      border-radius:34px;
+      padding:36px;
+      background:
+        linear-gradient(135deg, rgba(139,92,246,.20), rgba(34,197,94,.10)),
+        rgba(255,255,255,.03);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero:before, .hero:after{
+      content:""; position:absolute; border-radius:50%;
+      filter:blur(10px); opacity:.22; pointer-events:none;
+    }
+    .hero:before{width:250px; height:250px; background:var(--accent); top:-90px; right:-70px}
+    .hero:after{width:220px; height:220px; background:var(--accent4); bottom:-110px; left:-80px}
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 14px; border-radius:999px;
+      background:rgba(255,255,255,.09);
+      border:1px solid rgba(255,255,255,.10);
+      font-weight:800;
+      font-size:.95rem;
+    }
+    h1,h2,h3{
+      margin:0 0 12px;
+      font-family:'Baloo 2', cursive;
+      line-height:1;
+    }
+    h1{font-size:clamp(2.3rem, 5vw, 4.8rem); margin-top:16px; max-width:12ch}
+    h2{font-size:clamp(1.5rem, 2.6vw, 2.4rem)}
+    p{margin:0}
+    .lead{
+      max-width:900px;
+      margin-top:14px;
+      color:var(--muted);
+      font-size:1.08rem;
+      line-height:1.8;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:20px;
+      margin-top:22px;
+      align-items:end;
+    }
+    .btnrow{display:flex; flex-wrap:wrap; gap:12px; margin-top:22px}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px; text-decoration:none; border:0; cursor:pointer;
+      padding:14px 18px; border-radius:18px;
+      font-weight:900; color:#fff;
+      background:linear-gradient(135deg, var(--accent), #5f8cff);
+      box-shadow:0 12px 28px rgba(139,92,246,.30);
+    }
+    .btn.alt{background:linear-gradient(135deg, var(--accent3), #2dd4bf)}
+    .btn.good{background:linear-gradient(135deg, var(--accent2), #16a34a)}
+    .panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px;
+    }
+    .grid{display:grid; grid-template-columns:repeat(12, 1fr); gap:18px; margin-top:18px}
+    .span-4{grid-column:span 4}
+    .span-6{grid-column:span 6}
+    .span-8{grid-column:span 8}
+    .span-12{grid-column:span 12}
+    .small{color:var(--muted); line-height:1.7}
+    .info-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:24px;
+      padding:18px;
+      height:100%;
+    }
+    .emoji{
+      width:54px; height:54px; border-radius:18px;
+      display:grid; place-items:center;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.09);
+      font-size:1.6rem;
+      margin-bottom:12px;
+    }
+    .tagrow{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
+    .tag{
+      padding:8px 12px; border-radius:999px;
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.10);
+      font-weight:700; font-size:.92rem;
+    }
+    .lesson{
+      display:grid;
+      gap:12px;
+    }
+    .lesson .box{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:14px 16px;
+    }
+    .lesson strong, .rule strong{display:block; margin-bottom:4px}
+    code{
+      background:rgba(255,255,255,.08);
+      padding:2px 7px;
+      border-radius:8px;
+      color:#ffe08a;
+    }
+    .story{
+      font-size:1.02rem; line-height:1.8; color:var(--muted)
+    }
+    .story b{color:#fff}
+    .table-wrap{overflow:auto; border-radius:18px; border:1px solid rgba(255,255,255,.08)}
+    table{width:100%; min-width:980px; border-collapse:collapse; background:rgba(0,0,0,.12)}
+    th,td{padding:13px 14px; border-bottom:1px solid rgba(255,255,255,.08); vertical-align:top; text-align:left}
+    th{background:rgba(255,255,255,.06); font-family:'Baloo 2'; font-size:1.02rem}
+    td{color:var(--muted); line-height:1.65}
+    .gamehead{
+      display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+    .scorebox{
+      display:flex; flex-wrap:wrap; gap:10px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:18px; padding:12px 14px;
+    }
+    .qcard{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:24px; padding:18px;
+    }
+    .question{
+      font-size:1.15rem; font-weight:800; color:#fff; margin-bottom:12px;
+    }
+    .answers{display:grid; gap:10px}
+    .answer{
+      width:100%; text-align:left; cursor:pointer;
+      padding:13px 14px; border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06); color:var(--text);
+      font-size:1rem; transition:.2s ease;
+    }
+    .answer:hover{transform:translateY(-1px); background:rgba(255,255,255,.09)}
+    .feedback{min-height:24px; margin-top:10px; font-weight:900}
+    .ok{color:var(--ok)} .bad{color:var(--danger)}
+    .match-grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px;
+    }
+    .match-item{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px; padding:12px 14px;
+    }
+    select{
+      width:100%;
+      margin-top:10px;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(9,13,28,.85);
+      color:#fff;
+      font-size:1rem;
+    }
+    .footer{color:var(--muted); font-size:.95rem; line-height:1.7}
+    .accent{color:#fff; font-weight:800}
+    @media (max-width: 920px){
+      .hero-grid,.span-4,.span-6,.span-8{grid-template-columns:1fr; grid-column:span 12}
+      .match-grid{grid-template-columns:1fr}
+      h1{max-width:none}
+      .nav{flex-direction:column; align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="sticky">
+    <div class="nav">
+      <div class="brand"><div class="logo">🕵️</div> SQL Detective Lab</div>
+      <div class="navlinks">
+        <a href="#learn">Learn</a>
+        <a href="#queries">Queries</a>
+        <a href="#game">Game</a>
+        <a href="#cheat">Cheat Sheet</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="hero">
+      <span class="chip">✨ Learn SQL like a fun detective story</span>
+      <div class="hero-grid">
+        <div>
+          <h1>SQL made simple, fun, and easy to remember</h1>
+          <p class="lead">
+            You already know manual testing and automation. Now this page will help you understand
+            database testing queries in a very simple way. We will use baby-step language, tiny stories,
+            colorful cards, and a bigger practice game so learning feels like play.
+          </p>
+          <div class="btnrow">
+            <a class="btn" href="#learn">Start the story</a>
+            <a class="btn alt" href="#game">Play the quiz game</a>
+            <a class="btn good" href="#cheat">Open quick revision</a>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>What this page teaches</h3>
+          <div class="lesson">
+            <div class="box"><strong>Table check</strong>Is the table there or not?</div>
+            <div class="box"><strong>Column check</strong>How many columns, names, types, and key rules?</div>
+            <div class="box"><strong>Null check</strong>Can a field be empty?</div>
+            <div class="box"><strong>Key check</strong>Is it primary key, unique key, or normal column?</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="learn" class="grid">
+      <div class="panel span-6">
+        <h2>First, think like a detective</h2>
+        <p class="story">
+          A database table is like a classroom register. Every row is one student. Every column is one detail,
+          like name, roll number, or marks. In database testing, you often do not just ask “what data is inside?”
+          You also ask “is this table built correctly?” That is where these queries come in.
+        </p>
+        <div class="tagrow">
+          <span class="tag">Table = sheet</span>
+          <span class="tag">Row = one record</span>
+          <span class="tag">Column = one field</span>
+          <span class="tag">Null = empty</span>
+          <span class="tag">Key = special column</span>
+        </div>
+      </div>
+
+      <div class="panel span-6">
+        <h2>Core words in simple language</h2>
+        <div class="lesson">
+          <div class="box"><strong>SELECT</strong>Means “show me data.”</div>
+          <div class="box"><strong>FROM</strong>Means “from this table.”</div>
+          <div class="box"><strong>WHERE</strong>Means “only show matching rows.”</div>
+          <div class="box"><strong>INFORMATION_SCHEMA</strong>Is the database’s notebook that stores table details.</div>
+          <div class="box"><strong>COLUMNS</strong>This notebook page keeps column information.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" id="queries">
+      <div class="panel span-12">
+        <h2>Query stories, not boring definitions</h2>
+        <p class="story">
+          Each query is like asking the database a tiny question. The answer helps you check whether the design is correct.
+          `INFORMATION_SCHEMA.COLUMNS` is the MySQL metadata table for column details, and `IS_NULLABLE` / `COLUMN_KEY`
+          tell you if a column can be empty or if it is a key [web:19][page:1].
+        </p>
+        <div class="table-wrap" style="margin-top:16px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Query</th>
+                <th>Fun meaning</th>
+                <th>What tester learns</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>SHOW TABLES;</code></td>
+                <td>The database says, “Here are my rooms.”</td>
+                <td>Check whether your expected table exists.</td>
+              </tr>
+              <tr>
+                <td><code>SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'customers';</code></td>
+                <td>Count the number of building blocks in the table.</td>
+                <td>Verify total columns.</td>
+              </tr>
+              <tr>
+                <td><code>SELECT column_name FROM information_schema.columns WHERE table_name = 'customers';</code></td>
+                <td>Ask for the table’s column name list.</td>
+                <td>Confirm names match design.</td>
+              </tr>
+              <tr>
+                <td><code>SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'customers';</code></td>
+                <td>Ask, “What is this column made of?”</td>
+                <td>Check type like int, varchar, date.</td>
+              </tr>
+              <tr>
+                <td><code>SELECT column_name, is_nullable FROM information_schema.columns WHERE table_name = 'customers';</code></td>
+                <td>Ask, “Can this field be empty?”</td>
+                <td>Verify NULL / NOT NULL rules.</td>
+              </tr>
+              <tr>
+                <td><code>SELECT column_name, column_key FROM information_schema.columns WHERE table_name = 'customers';</code></td>
+                <td>Ask, “Is this column a hero key?”</td>
+                <td>Check PRI, UNI, or MUL.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel span-6">
+        <h2>Easy memory tricks</h2>
+        <div class="lesson">
+          <div class="box"><strong>Table found?</strong>Use <code>SHOW TABLES</code>.</div>
+          <div class="box"><strong>Column count?</strong>Use <code>COUNT(*)</code> on <code>information_schema.columns</code>.</div>
+          <div class="box"><strong>Column names?</strong>Use <code>column_name</code>.</div>
+          <div class="box"><strong>Data type?</strong>Use <code>data_type</code>.</div>
+          <div class="box"><strong>Empty allowed?</strong>Use <code>is_nullable</code>.</div>
+          <div class="box"><strong>Key check?</strong>Use <code>column_key</code>.</div>
+        </div>
+      </div>
+
+      <div class="panel span-6">
+        <h2>Why these fields matter</h2>
+        <p class="story">
+          In MySQL, `IS_NULLABLE` tells you whether the column can store `NULL` or not, and `COLUMN_KEY`
+          tells you whether the column is `PRI`, `UNI`, or `MUL` [web:19]. This helps testers catch design mistakes
+          before data issues happen. For example, a primary key should usually not be empty and should identify rows uniquely.
+        </p>
+      </div>
+    </section>
+
+    <section class="grid" id="game">
+      <div class="panel span-12">
+        <div class="gamehead">
+          <div>
+            <h2>Play zone: SQL detective game</h2>
+            <p class="story">You get more questions now. Learn by guessing, and the page tells you the answer right away.</p>
+          </div>
+          <div class="scorebox">
+            <div><span class="accent">Score:</span> <span id="score">0</span></div>
+            <div><span class="accent">Level:</span> <span id="level">1</span>/15</div>
+          </div>
+        </div>
+
+        <div class="qcard">
+          <div class="question" id="question"></div>
+          <div class="answers" id="answers"></div>
+          <div class="feedback" id="feedback"></div>
+          <div class="btnrow">
+            <button class="btn" id="nextBtn" type="button" style="display:none;">Next</button>
+            <button class="btn alt" id="restartBtn" type="button">Restart game</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel span-6">
+        <h2>Match the meaning</h2>
+        <p class="story">Choose the best SQL word for each simple meaning.</p>
+        <div class="match-grid">
+          <div class="match-item">
+            <strong>1. Show only matching rows</strong>
+            <select id="m1">
+              <option value="">Choose</option>
+              <option>SELECT</option>
+              <option>WHERE</option>
+              <option>FROM</option>
+            </select>
+          </div>
+          <div class="match-item">
+            <strong>2. Show data from a table</strong>
+            <select id="m2">
+              <option value="">Choose</option>
+              <option>SELECT</option>
+              <option>WHERE</option>
+              <option>FROM</option>
+            </select>
+          </div>
+          <div class="match-item">
+            <strong>3. Ask for table details</strong>
+            <select id="m3">
+              <option value="">Choose</option>
+              <option>INFORMATION_SCHEMA</option>
+              <option>ORDER BY</option>
+              <option>INSERT</option>
+            </select>
+          </div>
+          <div class="match-item">
+            <strong>4. Check empty allowed?</strong>
+            <select id="m4">
+              <option value="">Choose</option>
+              <option>IS_NULLABLE</option>
+              <option>COLUMN_KEY</option>
+              <option>DATA_TYPE</option>
+            </select>
+          </div>
+        </div>
+        <div class="btnrow">
+          <button class="btn good" id="checkMatch" type="button">Check answers</button>
+        </div>
+        <div class="feedback" id="matchFeedback"></div>
+      </div>
+
+      <div class="panel span-6" id="cheat">
+        <h2>Quick revision cheat sheet</h2>
+        <div class="lesson">
+          <div class="box"><strong>SHOW TABLES</strong>Shows table names in database.</div>
+          <div class="box"><strong>information_schema.columns</strong>Gives column details for tables.</div>
+          <div class="box"><strong>column_name</strong>Gives name of each column.</div>
+          <div class="box"><strong>data_type</strong>Shows type of column.</div>
+          <div class="box"><strong>is_nullable</strong>Shows YES or NO for empty values.</div>
+          <div class="box"><strong>column_key</strong>Shows PRI, UNI, or MUL.</div>
+        </div>
+      </div>
+    </section>
+
+   
+
+  <script>
+    const quiz = [
+      {q:"Which query shows all table names?", a:["SHOW TABLES;","SELECT column_name FROM information_schema.columns;","SELECT COUNT(*) FROM information_schema.columns;"], c:0},
+      {q:"Which query checks how many columns a table has?", a:["SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'customers';","SHOW TABLES;","SELECT * FROM customers;"], c:0},
+      {q:"Which word tells the column name?", a:["COLUMN_NAME","DATA_TYPE","IS_NULLABLE"], c:0},
+      {q:"Which word tells the column type?", a:["COLUMN_KEY","DATA_TYPE","TABLE_NAME"], c:1},
+      {q:"Which word tells if empty value is allowed?", a:["IS_NULLABLE","COLUMN_KEY","TABLE_SCHEMA"], c:0},
+      {q:"Which word tells if a column is primary key?", a:["COLUMN_KEY","DATA_TYPE","IS_NULLABLE"], c:0},
+      {q:"What does SELECT do?", a:["Shows data","Deletes data","Creates table"], c:0},
+      {q:"What does WHERE do?", a:["Filters rows","Makes table bigger","Renames column"], c:0},
+      {q:"What is a row?", a:["One record","One database","One key"], c:0},
+      {q:"What is a column?", a:["One field","One query","One join"], c:0},
+      {q:"Null means?", a:["Empty or missing value","Primary key","A table name"], c:0},
+      {q:"INFORMATION_SCHEMA is like?", a:["Database notebook","User data table","Delete button"], c:0},
+      {q:"COLUMN_KEY can show?", a:["PRI/UNI/MUL","INSERT/UPDATE/DELETE","YES/NO"], c:0},
+      {q:"Which query shows column names only?", a:["SELECT column_name FROM information_schema.columns WHERE table_name = 'customers';","SHOW TABLES;","SELECT * FROM customers;"], c:0},
+      {q:"Which concept is the best for checking design rules?", a:["Metadata","Random data","Browser cache"], c:0}
+    ];
+
+    let idx = 0, score = 0, locked = false;
+    const qEl = document.getElementById("question");
+    const aEl = document.getElementById("answers");
+    const fEl = document.getElementById("feedback");
+    const sEl = document.getElementById("score");
+    const lEl = document.getElementById("level");
+    const nextBtn = document.getElementById("nextBtn");
+    const restartBtn = document.getElementById("restartBtn");
+
+    function show() {
+      locked = false;
+      fEl.textContent = "";
+      fEl.className = "feedback";
+      nextBtn.style.display = "none";
+      lEl.textContent = idx + 1;
+      const item = quiz[idx];
+      qEl.textContent = item.q;
+      aEl.innerHTML = "";
+      item.a.forEach((t, i) => {
+        const b = document.createElement("button");
+        b.className = "answer";
+        b.type = "button";
+        b.textContent = t;
+        b.onclick = () => pick(i, b);
+        aEl.appendChild(b);
+      });
+    }
+
+    function pick(i, b) {
+      if (locked) return;
+      locked = true;
+      const item = quiz[idx];
+      const btns = [...document.querySelectorAll(".answer")];
+      btns.forEach(x => x.disabled = true);
+      if (i === item.c) {
+        score++;
+        sEl.textContent = score;
+        fEl.textContent = "Correct! Nice detective move.";
+        fEl.classList.add("ok");
+        b.style.borderColor = "rgba(74,222,128,.7)";
+        b.style.background = "rgba(74,222,128,.15)";
+      } else {
+        fEl.textContent = "Oops! The correct one is highlighted.";
+        fEl.classList.add("bad");
+        b.style.borderColor = "rgba(255,107,107,.7)";
+        b.style.background = "rgba(255,107,107,.14)";
+        btns[item.c].style.borderColor = "rgba(74,222,128,.7)";
+        btns[item.c].style.background = "rgba(74,222,128,.15)";
+      }
+      nextBtn.style.display = "inline-flex";
+    }
+
+    nextBtn.onclick = () => {
+      idx++;
+      if (idx >= quiz.length) {
+        qEl.textContent = "Game over! You finished the SQL detective challenge.";
+        aEl.innerHTML = "";
+        fEl.textContent = `Final score: ${score}/${quiz.length}.`;
+        fEl.className = "feedback ok";
+        nextBtn.style.display = "none";
+        lEl.textContent = quiz.length;
+        return;
+      }
+      show();
+    };
+
+    restartBtn.onclick = () => {
+      idx = 0; score = 0;
+      sEl.textContent = score;
+      lEl.textContent = 1;
+      show();
+    };
+
+    show();
+
+    document.getElementById("checkMatch").onclick = () => {
+      const answers = {
+        m1: "WHERE",
+        m2: "FROM",
+        m3: "INFORMATION_SCHEMA",
+        m4: "IS_NULLABLE"
+      };
+      let points = 0;
+      for (const id in answers) {
+        if (document.getElementById(id).value === answers[id]) points++;
+      }
+      const msg = points === 4
+        ? "Perfect! You matched all 4. Great job."
+        : `You got ${points}/4 right. Try again — you are close.`;
+      const box = document.getElementById("matchFeedback");
+      box.textContent = msg;
+      box.className = "feedback " + (points === 4 ? "ok" : "bad");
+    };
+  </script>
+</body>
+</html>
