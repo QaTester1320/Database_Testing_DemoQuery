@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Database Schema Testing Hub</title>
+    <title>Database Schema Testing Hub</title>
     <style>
-        /* Premium Matte Dark Aesthetics */
+        /* Premium Matte Dark Aesthetics - Bahnschrift Typography Integration */
         :root {
             --bg-main: #0a0a0c;
             --bg-card: #121215;
@@ -17,17 +17,18 @@
             --accent-success: #10b981;
             --accent-error: #f43f5e;
             --accent-warning: #f59e0b;
-            --font-stack: 'Mona Sans', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-stack: 'Bahnschrift', 'Segoe UI', -apple-system, sans-serif;
+            --font-code: 'Courier New', Courier, monospace;
         }
 
         body {
             font-family: var(--font-stack);
+            font-weight: 500; /* Smooth presentation of Bahnschrift */
             background-color: var(--bg-main);
             color: var(--text-main);
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            letter-spacing: -0.01em;
         }
 
         .workspace {
@@ -51,7 +52,7 @@
             font-weight: 700;
             margin: 0 0 8px 0;
             color: #ffffff;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.01em;
         }
 
         .header-title p {
@@ -146,6 +147,8 @@
             cursor: pointer;
             text-align: left;
             transition: all 0.2s ease;
+            font-family: var(--font-stack);
+            font-weight: 600;
         }
 
         .tc-item:hover {
@@ -165,7 +168,7 @@
         }
 
         .tc-item-id {
-            font-family: monospace;
+            font-family: var(--font-code);
             font-weight: bold;
             color: var(--accent-error);
             font-size: 0.85rem;
@@ -206,7 +209,7 @@
             font-size: 0.95rem;
         }
 
-        /* SQL Block Component Highlighter */
+        /* SQL Block Component Highlighter styled like Database Tool */
         .sql-display-box {
             background-color: #08080a;
             border: 1px solid var(--border-color);
@@ -216,7 +219,7 @@
         }
 
         .sql-interactive-line {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: var(--font-code);
             font-size: 1.1rem;
             font-weight: bold;
             display: flex;
@@ -316,7 +319,7 @@
         }
 
         .game-prompt {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: #ffffff;
             font-weight: 500;
             margin-bottom: 25px;
@@ -339,6 +342,7 @@
             cursor: pointer;
             font-size: 0.95rem;
             font-family: inherit;
+            font-weight: 600;
             transition: all 0.2s ease;
         }
 
@@ -347,12 +351,40 @@
             background-color: #22222a;
         }
 
-        /* Virtual Terminal Simulator */
+        /* Advanced Dynamic Correction Feedback Display */
+        .correction-box {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #1a1114;
+            border: 1px solid var(--accent-error);
+            font-size: 0.95rem;
+        }
+
+        .correction-box h5 {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            color: var(--accent-error);
+            font-weight: 700;
+        }
+
+        .correction-segment {
+            margin-bottom: 12px;
+        }
+
+        .correction-segment:last-child {
+            margin-bottom: 0;
+        }
+
+        .label-err { color: var(--accent-error); font-weight: bold; }
+        .label-ok { color: var(--accent-success); font-weight: bold; }
+
+        /* Virtual Terminal Simulator Console */
         .virtual-terminal {
             background-color: #050507;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: var(--font-code);
             padding: 20px;
             min-height: 280px;
             display: flex;
@@ -396,6 +428,7 @@
             cursor: pointer;
             display: none;
             transition: background-color 0.2s ease;
+            font-family: var(--font-stack);
         }
 
         .primary-action-btn:hover {
@@ -428,36 +461,42 @@
 
     <div class="workspace">
         
+        <!-- TOP CONTROL PANEL HEADER -->
         <header class="dashboard-header">
             <div class="header-title">
-                <h1>QA Schema Testing Engine</h1>
-                <p>Interactive verification suite for metadata structural automation architecture.</p>
+                <h1>QA Database Schema Explorer</h1>
+                <p>Learn how to test database tables, columns, and rules using simple commands.</p>
             </div>
             <div class="badge-system">
-                <div class="badge">Rank: <span id="user-rank">Novice QA</span></div>
-                <div class="badge">Global Accuracy: <span id="accuracy-stat">0%</span></div>
+                <div class="badge">Rank: <span id="user-rank">QA Student</span></div>
+                <div class="badge">Accuracy: <span id="accuracy-stat">0%</span></div>
             </div>
         </header>
 
+        <!-- FUNDAMENTALS SECTION -->
         <h2 class="section-headline">1. Structural Testing Core Definitions</h2>
         <div class="grid-two-col" style="margin-bottom: 40px;">
             <div class="core-concept-card">
-                <h3>The Schema Definition</h3>
-                <p>In automation and manual validation, a schema test checks the rules and layout properties of the table containers rather than looking at data records. This protects application code from crashing due to modified columns or broken datatypes during continuous deployments.</p>
+                <h3>What is Database Schema Testing?</h3>
+                <p>Instead of checking the data rows inside a table, <strong>schema testing checks the structure itself</strong>. You are verifying if the tables exist, if columns have the correct names, if they accept the right type of data, and if rules like <em>"cannot be empty"</em> are working properly.</p>
             </div>
             <div class="core-concept-card">
-                <h3>The Information Schema Mirror</h3>
-                <p>Modern relational engines mount an accessible dictionary platform called <code>information_schema</code>. This directory can be monitored using direct read-only queries to assert names, type formatting constraints, capacity constraints, and key assignments dynamically within assertions.</p>
+                <h3>What is information_schema?</h3>
+                <p>This is a <strong>built-in, read-only dictionary</strong> inside the database. It keeps track of the rules and blueprints for every single table and column you create. As a QA tester, you can query this dictionary to verify if developers built the database correctly according to requirements.</p>
             </div>
         </div>
 
+        <!-- LAB INTERACTIVE DISSECTOR -->
         <h2 class="section-headline">2. Interactive Query Dissector Laboratory</h2>
-        <p style="color: var(--text-muted); margin-top: -10px; margin-bottom: 20px; font-size: 0.95rem;">Select a Test Case from the panel to extract the query. Hover/click query tokens below to analyze structure execution properties.</p>
+        <p style="color: var(--text-muted); margin-top: -10px; margin-bottom: 20px; font-size: 0.95rem;">Click a Test Case on the left sidebar to see its query. Then, hover or click on different parts of the query to see exactly what they mean in plain English.</p>
         
         <div class="lab-container">
+            <!-- Sidebar Navigation -->
             <div class="lab-sidebar" id="lab-sidebar-target">
-                </div>
+                <!-- Injected dynamically -->
+            </div>
 
+            <!-- Dissector Interface Window -->
             <div class="lab-view">
                 <div class="view-header">
                     <h3 id="lab-title">Loading Schema Target...</h3>
@@ -465,7 +504,8 @@
                     
                     <div class="sql-display-box">
                         <div class="sql-interactive-line" id="sql-token-target">
-                            </div>
+                            <!-- Injected dynamically -->
+                        </div>
                     </div>
                 </div>
 
@@ -476,13 +516,15 @@
             </div>
         </div>
 
+        <!-- 10-STAGE GAME HUB AND TERMINAL SIMULATOR -->
         <h2 class="section-headline">3. Interactive 10-Stage QA Sandbox Arena</h2>
         
         <div class="grid-two-col">
+            <!-- Game Core Panel -->
             <div class="game-panel">
                 <div>
                     <div class="game-meta-bar">
-                        <div class="stat-node">Stage: <strong id="game-stage-num">1</strong> of 10</div>
+                        <div class="stat-node">Question: <strong id="game-stage-num">1</strong> of 10</div>
                         <div class="game-stats-cluster">
                             <div class="stat-node">Streak: <strong id="game-streak">0</strong></div>
                             <div class="stat-node">Score: <strong id="game-score">0</strong></div>
@@ -498,18 +540,20 @@
                     </div>
 
                     <div class="game-options-grid" id="game-options-target">
-                        </div>
+                        <!-- Options injected dynamically -->
+                    </div>
                 </div>
 
                 <div class="action-container">
-                    <button class="primary-action-btn" id="game-next-btn" onclick="triggerNextGameStep()">Advance Verification Run</button>
+                    <button class="primary-action-btn" id="game-next-btn" onclick="triggerNextGameStep()">Next Question</button>
                 </div>
             </div>
 
+            <!-- Output Monitor Interface -->
             <div class="virtual-terminal">
-                <div class="terminal-topbar">Live Sandbox DB Result Output Log</div>
+                <div class="terminal-topbar">Simulated Live Database Output Console</div>
                 <div id="terminal-log-target" style="flex-grow: 1;">
-                    <div class="terminal-log"><span class="term-input-line">QA-Terminal$</span> pipeline operational. awaiting instructions...</div>
+                    <div class="terminal-log"><span class="term-input-line">QA-Terminal$</span> Database system online. Awaiting query run...</div>
                 </div>
             </div>
         </div>
@@ -517,190 +561,240 @@
     </div>
 
     <script>
-        // MASTER TEST CASE SCHEMA DATABASE DATA
+        // MASTER TEST CASE SCHEMA DATABASE DATA - BASIC ENGLISH REWRITE
         const schemaTestCases = [
             {
                 id: "TC001",
-                title: "Check table presence in database schema",
-                desc: "Validates that the target table structure exists within the active catalog workspace instance before invoking data transactions.",
-                priority: "P1",
+                title: "Check if table exists",
+                desc: "Verifies that your required table was actually created inside the database before you try to run any automation or manual data tests.",
+                priority: "High",
                 tokens: [
-                    { text: "SHOW", type: "keyword", desc: "Command instruction that requests the engine to print a list of active schema structures." },
-                    { text: "TABLES;", type: "keyword", desc: "Specifies that the list returned must strictly consist of data tables within the current active database context." }
+                    { text: "SHOW", type: "keyword", desc: "A command that tells the database to list out its structure components." },
+                    { text: "TABLES;", type: "keyword", desc: "Tells the database to specifically list the names of all tables inside it." }
                 ]
             },
             {
                 id: "TC002",
-                title: "Check table name conventions",
-                desc: "Verifies whether structural table identifiers conform to style guide protocols, checking for illegal character spacing or word counts.",
-                priority: "P1",
+                title: "Check table naming conventions",
+                desc: "Checks if the table names follow standard project rules (for example: using lowercase letters, singular words, and no spaces).",
+                priority: "Medium",
                 tokens: [
-                    { text: "SHOW", type: "keyword", desc: "Asks the engine to read and surface metadata structures." },
-                    { text: "TABLES;", type: "keyword", desc: "Outputs the visible collection names so the QA tester can verify that no spaces or illegal upper-case characters exist." }
+                    { text: "SHOW", type: "keyword", desc: "Tells the system to display structural information." },
+                    { text: "TABLES;", type: "keyword", desc: "Brings up the list of table names so you can manually or automatically check if they follow proper naming rules." }
                 ]
             },
             {
                 id: "TC003",
-                title: "Check number of columns in a table",
-                desc: "Asserts that the aggregate column declaration count matches architecture specifications exactly (expecting 13 columns total).",
-                priority: "P1",
+                title: "Check total number of columns",
+                desc: "Checks if the total number of columns in the database table matches the design document (for example, checking if it has exactly 13 columns).",
+                priority: "High",
                 tokens: [
-                    { text: "SELECT", type: "keyword", desc: "Command instructing the database engine to retrieve data fields." },
-                    { text: "COUNT(*)", type: "field", desc: "An aggregate counting function that adds up every single record match discovered in the metadata." },
-                    { text: "AS NumberOfColumns", type: "field", desc: "Renames the returned column block temporarily to make your testing reports clean and human-readable." },
-                    { text: "FROM", type: "keyword", desc: "Points toward the specific data table configuration where this metadata information lives." },
-                    { text: "information_schema.columns", type: "schema", desc: "The internal engine master table dictionary tracking structural properties for all columns system-wide." },
-                    { text: "WHERE", type: "keyword", desc: "Filters down the search query so you don't load data for irrelevant structures." },
-                    { text: "table_name = 'customers';", type: "string", desc: "Restricts the search scope so it only checks attributes linked to your target table configuration named 'customers'." }
+                    { text: "SELECT", type: "keyword", desc: "Tells the database you want to retrieve or read some data." },
+                    { text: "COUNT(*)", type: "field", desc: "Counts every item that matches your search filter." },
+                    { text: "AS NumberOfColumns", type: "field", desc: "Gives the output column a clean, friendly name so your test report looks easy to read." },
+                    { text: "FROM", type: "keyword", desc: "Points to the location where you want to read information from." },
+                    { text: "information_schema.columns", type: "schema", desc: "The built-in system dictionary table that stores tracking rules for all columns across the database." },
+                    { text: "WHERE", type: "keyword", desc: "Filters the results so you don't get information for every single table." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Limits the count strictly to the table named 'customers'." }
                 ]
             },
             {
                 id: "TC004",
-                title: "Check column names in a table",
-                desc: "Extracts literal column string labels to verify they sync with system engineering database requirements documentation.",
-                priority: "P1",
+                title: "Check actual column names",
+                desc: "Pulls a list of all column headers in a table to verify they match the spelling and format in the requirement documents.",
+                priority: "High",
                 tokens: [
-                    { text: "SELECT", type: "keyword", desc: "Requests a readout of specified data points." },
-                    { text: "column_name", type: "field", desc: "Target column attribute that isolates and pulls the actual text name of each table header." },
-                    { text: "FROM", type: "keyword", desc: "Points to the storage engine system location." },
-                    { text: "information_schema.columns", type: "schema", desc: "The master structural column logging table." },
-                    { text: "WHERE", type: "keyword", desc: "Initializes structural filtration limits." },
-                    { text: "table_name = 'customers';", type: "string", desc: "Isolates validation metadata strictly down to the 'customers' table entity layout context." }
+                    { text: "SELECT", type: "keyword", desc: "Starts the request to read information from the database." },
+                    { text: "column_name", type: "field", desc: "Specifies that you only want to pull the actual text names of the columns." },
+                    { text: "FROM", type: "keyword", desc: "Points to the system layout dictionary table." },
+                    { text: "information_schema.columns", type: "schema", desc: "The built-in master directory tracking column structures." },
+                    { text: "WHERE", type: "keyword", desc: "Filters your search request." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Tells the system to only look at columns inside the 'customers' table." }
                 ]
             },
             {
                 id: "TC005",
-                title: "Check data type of columns in table",
-                desc: "Confirms structural datatypes match field definitions (e.g. verifying IDs are integers and names are text strings).",
-                priority: "P1",
+                title: "Check column data types",
+                desc: "Verifies if the data types match the fields (for example: checking if a User ID column only accepts numbers, and a Name column accepts text).",
+                priority: "High",
                 tokens: [
-                    { text: "SELECT", type: "keyword", desc: "Initiates fields retrieval pipeline extraction." },
-                    { text: "column_name,", type: "field", desc: "Pulls the literal name of the column header attribute." },
-                    { text: "data_type", type: "field", desc: "Pulls the structural classification label assigned to the field (like integer, decimal, or varchar text)." },
-                    { text: "FROM", type: "keyword", desc: "Target directory specification clause." },
-                    { text: "information_schema.columns", type: "schema", desc: "The embedded engine metadata directory tracking parameters." },
-                    { text: "WHERE", type: "keyword", desc: "Conditional row matching directive." },
-                    { text: "table_name = 'customers';", type: "string", desc: "Locks downstream assessment down to parameters containing the 'customers' layout reference." }
+                    { text: "SELECT", type: "keyword", desc: "Starts your request to view specific database fields." },
+                    { text: "column_name,", type: "field", desc: "Pulls the name of the column header." },
+                    { text: "data_type", type: "field", desc: "Pulls the rule type assigned to that column (like 'int' for numbers or 'varchar' for words)." },
+                    { text: "FROM", type: "keyword", desc: "Points to the structural reference dictionary." },
+                    { text: "information_schema.columns", type: "schema", desc: "The built-in table that tracks all database column properties." },
+                    { text: "WHERE", type: "keyword", desc: "Filters your search query rows." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Limits the check strictly to the layout of the 'customers' table." }
                 ]
             },
             {
                 id: "TC006",
-                title: "Check size of the columns in a table",
-                desc: "Evaluates exact storage allocations and text array boundary lengths configured across elements to guard against memory truncation bugs.",
-                priority: "P1",
+                title: "Check column size/length limits",
+                desc: "Checks if columns have proper size limits set so that long user inputs do not crash the system or get cut off unexpectedly.",
+                priority: "Medium",
                 tokens: [
-                    { text: "SELECT", type: "keyword", desc: "Queries matching dictionary lines." },
-                    { text: "column_name,", type: "field", desc: "Fetches specific individual column labels." },
-                    { text: "column_type", type: "field", desc: "Pulls the detailed datatype structure format alongside its max character limits (example: showing varchar(255) explicitly)." },
-                    { text: "FROM", type: "keyword", desc: "Metadata index pathway router statement." },
-                    { text: "information_schema.columns", type: "schema", desc: "Internal reference framework indexing available properties." },
-                    { text: "WHERE", type: "keyword", desc: "Row limit application check context." },
-                    { text: "table_name = 'customers';", type: "string", desc: "Locks inspection context down to parameters containing the 'customers' table configuration signature." }
+                    { text: "SELECT", type: "keyword", desc: "Tells the database to read out specific layout data fields." },
+                    { text: "column_name,", type: "field", desc: "Pulls the name of the table columns." },
+                    { text: "column_type", type: "field", desc: "Displays both the data type and the max size limit together (for example: showing 'varchar(255)' explicitly)." },
+                    { text: "FROM", type: "keyword", desc: "Points to the system directory path." },
+                    { text: "information_schema.columns", type: "schema", desc: "The built-in master table that stores column properties." },
+                    { text: "WHERE", type: "keyword", desc: "Sets a search filter condition." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Restricts the output data strictly to the 'customers' table." }
                 ]
             },
             {
                 id: "TC007",
-                title: "Check nulls fields in a table",
-                desc: "Verifies nullable parameters across configurations to ensure critical fields cannot be written as blank entries during operational updates.",
-                priority: "P1",
+                title: "Check for nullable fields",
+                desc: "Verifies which columns are allowed to be left empty (NULL) and which columns must always contain data (NOT NULL).",
+                priority: "High",
                 tokens: [
-                    { text: "SELECT", type: "keyword", desc: "Triggers properties reading sequence instructions." },
-                    { text: "column_name,", type: "field", desc: "Identifies unique field elements inside targets." },
-                    { text: "is_nullable", type: "field", desc: "Pulls structural configuration flag indicating if a field handles empty values (YES) or rejects blanks (NO)." },
-                    { text: "FROM", type: "keyword", desc: "Directs engine lookup parameters layout schema." },
-                    { text: "information_schema.columns", type: "schema", desc: "Global data schema parameters mapping asset tracker." },
-                    { text: "WHERE", type: "keyword", desc: "Logical filter baseline marker." },
-                    { text: "table_name = 'customers';", type: "string", desc: "Binds operational validation down to parameters matching the 'customers' structure metadata profile." }
+                    { text: "SELECT", type: "keyword", desc: "Asks the system to display specific structural metrics." },
+                    { text: "column_name,", type: "field", desc: "Pulls the names of the columns." },
+                    { text: "is_nullable", type: "field", desc: "Pulls the rule status (Outputs 'YES' if it can be left blank, or 'NO' if it is mandatory)." },
+                    { text: "FROM", type: "keyword", desc: "Points to the system properties layout tracker." },
+                    { text: "information_schema.columns", type: "schema", desc: "The built-in framework table that tracks all column configurations." },
+                    { text: "WHERE", type: "keyword", desc: "Filters the layout data check." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Tells the system to only show column rules for the 'customers' table." }
                 ]
             },
             {
                 id: "TC008",
-                title: "Check column keys in a table",
-                desc: "Examines architectural indices across elements to verify primary key or unique key configurations are present.",
-                priority: "P1",
+                title: "Check column keys indices",
+                desc: "Verifies if the correct column is configured as the Primary Key (the main unique identifier for that table).",
+                priority: "High",
                 tokens: [
-                    { text: "SELECT", type: "keyword", desc: "Executes properties collection readout process." },
-                    { text: "column_name,", type: "field", desc: "Targets targeted attribute key label strings." },
-                    { text: "column_key", type: "field", desc: "Exposes system constraint indexing classifications (such as displaying PRI for primary system keys)." },
-                    { text: "FROM", type: "keyword", desc: "Specifies engine catalog routing logic directions." },
-                    { text: "information_schema.columns", type: "schema", desc: "Internal platform dictionary logging field parameters values." },
-                    { text: "WHERE", type: "keyword", desc: "Structural limit evaluation statement wrapper." },
-                    { text: "table_name = 'customers';", type: "string", desc: "Binds execution parameters down to metadata properties containing the 'customers' layout context signature." }
+                    { text: "SELECT", type: "keyword", desc: "Instructs the system to read configuration properties." },
+                    { text: "column_name,", type: "field", desc: "Selects the specific column name headers." },
+                    { text: "column_key", type: "field", desc: "Displays the key rule setting (for example: showing 'PRI' if it is the main Primary Key)." },
+                    { text: "FROM", type: "keyword", desc: "Points to the system blueprint tracking table." },
+                    { text: "information_schema.columns", type: "schema", desc: "The internal database directory storing all column configurations." },
+                    { text: "WHERE", type: "keyword", desc: "Filters the search results." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Limits the lookup strictly to the keys inside the 'customers' table." }
                 ]
             }
         ];
 
-        // 10-STAGE EXTENDED EXPANDED GAME DATA
+        // 10-STAGE GAME DATA REWRITTEN TO BASIC ENGLISH WITH EXPLICIT WHY/WHAT REASONING
         const arenaQuestions = [
             {
-                q: "Your validation suite must assert that the database contains an active table layout called 'orders'. Which query maps to checking general table presence context?",
+                q: "Your test plan says you need to check if a new table called 'orders' was actually created in the database. Which simple query lists all existing tables?",
                 options: ["SELECT * FROM information_schema.tables;", "SHOW TABLES;", "SELECT column_name FROM information_schema.columns;"],
                 correct: 1,
                 cmd: "SHOW TABLES;",
-                out: "+-------------------+\n| Tables_in_sandbox |\n+-------------------+\n| customers         |\n| orders            |\n+-------------------+"
+                out: "+-------------------+\n| Tables_in_sandbox |\n+-------------------+\n| customers         |\n| orders            |\n+-------------------+",
+                reasons: [
+                    "This query extracts rows from the back-end system table catalog. While technically possible, it produces an over-complicated structural report and is considered an incorrect approach for a basic presence test case.",
+                    "The simplest, most direct way to check table presence is using the standard command statement. It prints a simple, human-readable list of all active tables.",
+                    "This query isolates and prints out individual column header names. It does not help you view a high-level list of tables."
+                ]
             },
             {
-                q: "A P1 architecture rule states that table names must be completely in lowercase with no special characters. Which command pulls the names list to execute this check?",
+                q: "The company style guide says all database table names must use small letters and no spaces. Which command do you run to print out the table names list so you can check them?",
                 options: ["SELECT schema_name FROM information_schema.schemata;", "SHOW TABLES;", "DESCRIBE customers;"],
                 correct: 1,
                 cmd: "SHOW TABLES;",
-                out: "+-------------------+\n| Tables_in_sandbox |\n+-------------------+\n| customers         |\n| orders            |\n+-------------------+"
+                out: "+-------------------+\n| Tables_in_sandbox |\n+-------------------+\n| customers         |\n| orders            |\n+-------------------+",
+                reasons: [
+                    "This statement checks the higher-level database schema names (the project workspaces), not the names of the tables inside those workspaces.",
+                    "By running this command, you print all table titles side-by-side to verify if any names contain spaces or forbidden capital letters.",
+                    "This command displays inside properties for one specific table named 'customers'. It does not give you a full list of all table names."
+                ]
             },
             {
-                q: "You are setting up an assertion confirming that a migration script successfully injected exactly 13 columns into the 'customers' schema structure. Which query returns this total integer count?",
+                q: "The design document says the 'customers' table must have exactly 13 total columns. Which query counts the columns and gives you a single total number?",
                 options: ["SELECT COUNT(*) AS NumberOfColumns FROM information_schema.columns WHERE table_name = 'customers';", "SELECT SUM(columns) FROM information_schema.tables;", "SHOW COLUMNS FROM customers;"],
                 correct: 0,
                 cmd: "SELECT COUNT(*) AS NumberOfColumns FROM information_schema.columns WHERE table_name = 'customers';",
-                out: "+-----------------+\n| NumberOfColumns |\n+-----------------+\n|              13 |\n+-----------------+"
+                out: "+-----------------+\n| NumberOfColumns |\n+-----------------+\n|              13 |\n+-----------------+",
+                reasons: [
+                    "By using the mathematical aggregate function combined with a specific table name filter, the database counts the rows in the system dictionary and prints the exact number of column definitions.",
+                    "This query is invalid syntax because there is no column named 'columns' that you can perform a sum addition on inside the system table catalog.",
+                    "This statement displays a detailed list of the columns, but it forces your automation code to count them manually one by one instead of returning a clean single total number."
+                ]
             },
             {
-                q: "You need to confirm that an update script correctly renamed a column from 'usr_phone' to 'phone_number'. Which framework instruction extracts literal naming configurations?",
+                q: "You want to confirm that a developer successfully changed a column header name from 'phone' to 'phone_number'. Which query pulls a list of just the column names?",
                 options: ["SHOW SCHEMA NAMES;", "SELECT column_name FROM information_schema.columns WHERE table_name = 'customers';", "SELECT * FROM customers;"],
                 correct: 1,
                 cmd: "SELECT column_name FROM information_schema.columns WHERE table_name = 'customers';",
-                out: "+-----------------+\n| column_name     |\n+-----------------+\n| customer_id     |\n| email           |\n| phone_number    |\n+-----------------+"
+                out: "+-----------------+\n| column_name     |\n+-----------------+\n| customer_id     |\n| email           |\n| phone_number    |\n+-----------------+",
+                reasons: [
+                    "This is an invalid command statement that does not exist in relational SQL databases.",
+                    "This selects the specific text parameter tracking column names from the global layout dictionary, filtering down strictly to your target table name.",
+                    "This command reads the actual data records (like real customer profiles) from the database table. It does not inspect the system blueprint properties."
+                ]
             },
             {
-                q: "A data truncation issue is corrupted user strings because the 'email' input column is configured as an integer instead of a character array. Which query evaluates structural column data classifications?",
+                q: "You notice an automated test is failing because text characters are causing errors in an ID field. Which query shows you the data types of columns so you can verify if a column is set to numbers (int) or text (varchar)?",
                 options: ["SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'customers';", "SELECT data_type FROM customers;", "SHOW DATA_TYPES;"],
                 correct: 0,
                 cmd: "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'customers';",
-                out: "+-------------+-----------+\n| column_name | data_type |\n+-------------+-----------+\n| customer_id | int       |\n| email       | varchar   |\n+-------------+-----------+"
+                out: "+-------------+-----------+\n| column_name | data_type |\n+-------------+-----------+\n| customer_id | int       |\n| email       | varchar   |\n+-------------+-----------+",
+                reasons: [
+                    "This query targets the column rules dictionary and brings back the column names alongside their formal structural validation rules (like integer or text string configurations).",
+                    "You cannot select structural rules directly from operational data tables. The 'customers' table only holds customer data rows, not the blueprint rules.",
+                    "This is an invalid database command. Database systems do not have a universal command to show all types globally like this."
+                ]
             },
             {
-                q: "Your spec states that the 'first_name' string container must accommodate exactly 255 maximum characters. Which query tracks explicit structural sizing parameters alongside types data?",
+                q: "The functional specification says the 'first_name' column must have a maximum size limit of 255 characters. Which query shows you the column names alongside their exact maximum length constraints?",
                 options: ["SELECT length FROM customers;", "SELECT column_name, column_type FROM information_schema.columns WHERE table_name = 'customers';", "SHOW MAX_LENGTH;"],
                 correct: 1,
                 cmd: "SELECT column_name, column_type FROM information_schema.columns WHERE table_name = 'customers';",
-                out: "+-------------+--------------+\n| column_name | column_type  |\n+-------------+--------------+\n| first_name  | varchar(255) |\n+-------------+--------------+"
+                out: "+-------------+--------------+\n| column_name | column_type  |\n+-------------+--------------+\n| first_name  | varchar(255) |\n+-------------+--------------+",
+                reasons: [
+                    "There is no standard column property field called 'length' stored inside individual production data tables.",
+                    "By reading the specific property tracking parameters, the database outputs the full configuration rule, revealing the exact maximum size boundaries like 'varchar(255)'.",
+                    "This is an unrecognized database syntax command and will cause an execution parser error."
+                ]
             },
             {
-                q: "An automation pipeline failure is tracked down to an identity field accepting null/blank records when it shouldn't. Which query isolates column nullable status parameters?",
+                q: "An automated sign-up test fails because the database rejects an entry when a user leaves the 'middle_name' field blank. Which query checks if a column is allowed to be empty (nullable)?",
                 options: ["SELECT column_name, is_nullable FROM information_schema.columns WHERE table_name = 'customers';", "SHOW EMPTY FIELDS FROM customers;", "SELECT null_status FROM information_schema.tables;"],
                 correct: 0,
                 cmd: "SELECT column_name, is_nullable FROM information_schema.columns WHERE table_name = 'customers';",
-                out: "+-------------+-------------+\n| column_name | is_nullable |\n+-------------+-------------+\n| customer_id | NO          |\n| middle_name | YES         |\n+-------------+-------------+"
+                out: "+-------------+-------------+\n| column_name | is_nullable |\n+-------------+-------------+\n| customer_id | NO          |\n| middle_name | YES         |\n+-------------+-------------+",
+                reasons: [
+                    "This query extracts the boolean property flag which explicitly outputs 'YES' or 'NO' to confirm if empty entries are permitted.",
+                    "This is incorrect pseudo-code. Database tools do not understand a command statement structured this way.",
+                    "The system table catalog tracks generic metrics for full tables. It does not store individual cell nullable rule details."
+                ]
             },
             {
-                q: "You want to dynamically ensure that a developer designated 'customer_id' as the targeted operational Primary Key within the indexing architecture. Which dictionary attribute extracts this data?",
+                q: "You need to verify if the 'customer_id' column is properly set up as the Primary Key (main unique identifier) for the table. Which query checks for column keys?",
                 options: ["SELECT key_type FROM customers;", "SHOW ALL KEYS;", "SELECT column_name, column_key FROM information_schema.columns WHERE table_name = 'customers';"],
                 correct: 2,
                 cmd: "SELECT column_name, column_key FROM information_schema.columns WHERE table_name = 'customers';",
-                out: "+-------------+------------+\n| column_name | column_key |\n+-------------+------------+\n| customer_id | PRI        |\n| email       | UNI        |\n+-------------+------------+"
+                out: "+-------------+------------+\n| column_name | column_key |\n+-------------+------------+\n| customer_id | PRI        |\n| email       | UNI        |\n+-------------+------------+",
+                reasons: [
+                    "The field properties are not stored within the customer data records table itself.",
+                    "This statement is not a recognized SQL keyword command pattern.",
+                    "This query requests structural constraint indices from the metadata column log, checking if the identifier shows 'PRI' for Primary Key or 'UNI' for Unique Key rules."
+                ]
             },
             {
-                q: "Why is the statement segment `WHERE table_name = 'customers'` critical inside automation framework assertions pointing at internal infrastructure columns dictionaries?",
-                options: ["It dynamically writes test datasets records inside tables variables models workspace.", "It safely isolates mapping lookups to match only structure data tied to that unique system container entry.", "It deletes structural properties linked to conflicting workspace databases configurations items."],
+                q: "Why is it important to include `WHERE table_name = 'customers'` at the end of your schema queries?",
+                options: ["It writes new test records inside that table.", "It ensures you only get the structure details for that specific table, instead of mixing data from all tables.", "It deletes structural details from other conflicting tables."],
                 correct: 1,
-                cmd: "-- Structural isolation check --",
-                out: "Engine isolated scope matching rule: table_name structural constraints confirmed."
+                cmd: "-- Table filter verification --",
+                out: "Result: Output limited strictly to the 'customers' table layout.",
+                reasons: [
+                    "This is incorrect. A filtering rule condition cannot create or inject new database records.",
+                    "Because the system dictionary tracks columns for every single table in the database together, you must use this condition to isolate the parameters down to your single target test table.",
+                    "This is a safe read-only filtering command. It never alters, deletes, or changes any table architectures."
+                ]
             },
             {
-                q: "What component system does `information_schema` serve as within modern relational systems architecture validations spaces?",
-                options: ["An analytical system storage cluster handling external log parameters backups lists.", "An automated runtime data cache serving user account registration details views.", "A read-only configuration blueprint detailing current metadata definitions rules parameters."],
+                q: "What is the main role of the `information_schema` workspace in database structure testing?",
+                options: ["It acts as a storage backup system for historical user transaction logs.", "It serves as a direct cache memory to speed up user account login views.", "It functions as a read-only dictionary that holds all structural layout rules and blueprints for your database tables."],
                 correct: 2,
-                cmd: "-- Complete Audit Verified --",
-                out: "System Schema Audit Sequence: Operational Stability Verified (100% Core Standards Met)."
+                cmd: "-- Final Audit Complete --",
+                out: "System Check: All 10 structure validation rules match verification protocols perfectly.",
+                reasons: [
+                    "It does not store operational transaction data logs or database application backup files.",
+                    "It has no role in managing runtime application cache layers or speeding up security logins.",
+                    "It is the central metadata repository that acts as an accessible system blueprint, letting testers check exact schema parameters dynamically."
+                ]
             }
         ];
 
@@ -737,7 +831,6 @@
         function mountLabTestCase(index) {
             currentActiveLabIndex = index;
             
-            // Re-render sidebar active tokens states
             const items = document.querySelectorAll(".tc-item");
             items.forEach((item, idx) => {
                 if(idx === index) item.classList.add("active");
@@ -748,7 +841,6 @@
             document.getElementById("lab-title").innerText = `${targetCase.id}: ${targetCase.title}`;
             document.getElementById("lab-desc").innerText = targetCase.desc;
 
-            // Mount SQL Token Blocks
             const tokensTarget = document.getElementById("sql-token-target");
             tokensTarget.innerHTML = "";
 
@@ -761,12 +853,11 @@
                 tokensTarget.appendChild(tokenNode);
             });
 
-            // Set initial token explainer state
             updateTokenExplainer(targetCase.tokens[0].text, targetCase.tokens[0].desc);
         }
 
         function updateTokenExplainer(title, systemDescription) {
-            document.getElementById("exp-title").innerText = `Token Resource: ${title}`;
+            document.getElementById("exp-title").innerText = `Query Part: ${title}`;
             document.getElementById("exp-body").innerText = systemDescription;
         }
 
@@ -794,13 +885,12 @@
         function processGameAnswer(userChoiceIdx, interfaceButton) {
             const currentQuestion = arenaQuestions[gameStageIdx];
             const choicesButtons = document.querySelectorAll(".game-opt-btn");
+            const optionsTarget = document.getElementById("game-options-target");
             
-            // Lock active selection nodes instantly
             choicesButtons.forEach(btn => btn.disabled = true);
 
             runningAnswersCount++;
 
-            // Inject current query logs to simulation pane
             const consoleLogTarget = document.getElementById("terminal-log-target");
             consoleLogTarget.innerHTML = `
                 <div class="terminal-log"><span class="term-input-line">QA-Terminal$</span> ${currentQuestion.cmd}</div>
@@ -815,16 +905,48 @@
                 interfaceButton.style.borderColor = varCssAccessor('--accent-success');
                 interfaceButton.style.backgroundColor = "rgba(16, 185, 129, 0.1)";
                 
-                consoleLogTarget.innerHTML += `<div class="terminal-log" style="color: var(--accent-success);">[SUCCESS]: Verification standard parameters assertion passed successfully.</div>`;
+                consoleLogTarget.innerHTML += `<div class="terminal-log" style="color: var(--accent-success);">[PASS]: Structure verified successfully. The rules match the specifications.</div>`;
+                
+                // Show clean success box below choices
+                const passBox = document.createElement("div");
+                passBox.className = "correction-box";
+                passBox.style.borderColor = varCssAccessor('--accent-success');
+                passBox.style.backgroundColor = "#111a15";
+                passBox.innerHTML = `
+                    <h5 style="color: var(--accent-success);">✔ Verification Passed!</h5>
+                    <div class="correction-segment">
+                        <span class="label-ok">Why it is correct:</span> ${currentQuestion.reasons[currentQuestion.correct]}
+                    </div>
+                `;
+                optionsTarget.appendChild(passBox);
             } else {
                 gameStreak = 0;
                 interfaceButton.style.borderColor = varCssAccessor('--accent-error');
                 interfaceButton.style.backgroundColor = "rgba(244, 63, 94, 0.1)";
                 
-                consoleLogTarget.innerHTML += `<div class="terminal-log" style="color: var(--accent-error);">[FAILURE]: Assert evaluation broken. Schema alignment structure missing.</div>`;
+                consoleLogTarget.innerHTML += `<div class="terminal-log" style="color: var(--accent-error);">[FAIL]: Assertion error. This query does not pull the correct rule metrics for this requirement.</div>`;
+                
+                // Advanced Dynamic Correction Logic
+                const correctionBox = document.createElement("div");
+                correctionBox.className = "correction-box";
+                correctionBox.innerHTML = `
+                    <h5>✘ Requirement Discrepancy Found</h5>
+                    <div class="correction-segment">
+                        <span class="label-err">Why your answer is incorrect:</span> 
+                        <em>${currentQuestion.reasons[userChoiceIdx]}</em>
+                    </div>
+                    <div class="correction-segment">
+                        <span class="label-ok">Correct Statement:</span> 
+                        <code style="background-color: #000; color: #34d399; font-family: var(--font-code); padding: 2px 6px; border-radius: 4px;">${currentQuestion.options[currentQuestion.correct]}</code>
+                    </div>
+                    <div class="correction-segment">
+                        <span class="label-ok">Why it is correct:</span> 
+                        <strong>${currentQuestion.reasons[currentQuestion.correct]}</strong>
+                    </div>
+                `;
+                optionsTarget.appendChild(correctionBox);
             }
 
-            // Update stats layout components metrics
             document.getElementById("game-score").innerText = gameScore;
             document.getElementById("game-streak").innerText = gameStreak;
             document.getElementById("accuracy-stat").innerText = `${Math.round((runningCorrectCount / runningAnswersCount) * 100)}%`;
@@ -839,11 +961,10 @@
             if(gameStageIdx < arenaQuestions.length) {
                 loadGameStage();
             } else {
-                // Terminate deployment sequence assessment run successfully
-                document.getElementById("game-prompt-target").innerText = "Database Automated Framework Integration Quest Completed.";
+                document.getElementById("game-prompt-target").innerText = "Database Structure Quiz Route Completed!";
                 document.getElementById("game-options-target").innerHTML = `
                     <div style="padding: 20px; border-radius: 8px; background-color: rgba(16, 185, 129, 0.05); border: 1px dashed var(--accent-success); color: #ffffff;">
-                        Final Evaluation Run Analytics: Total Verified Points Score tracked at ${gameScore} units. Review token structure components maps above to maintain precision metrics.
+                        Great job! You finished all 10 stages. Your final testing score is ${gameScore} points. Keep interacting with the Query Dissector panel above to practice reading column metadata.
                     </div>
                 `;
                 document.getElementById("game-next-btn").style.display = "none";
@@ -851,10 +972,10 @@
         }
 
         function updateDynamicRankTitle() {
-            let activeRank = "Novice QA";
-            if (gameScore >= 800) activeRank = "Metadata Automation Lead";
-            else if (gameScore >= 500) activeRank = "Senior Schema Auditor";
-            else if (gameScore >= 200) activeRank = "SQL Systems Inspector";
+            let activeRank = "QA Student";
+            if (gameScore >= 800) activeRank = "Database QA Specialist";
+            else if (gameScore >= 500) activeRank = "Senior Structure Checker";
+            else if (gameScore >= 200) activeRank = "Query Inspector";
             
             document.getElementById("user-rank").innerText = activeRank;
         }
@@ -863,7 +984,6 @@
             return getComputedStyle(document.documentElement).getPropertyValue(variableStringName).trim();
         }
 
-        // ENTRY HOOK WINDOW LOAD INITIALIZATION RUNS
         window.onload = () => {
             initializeLabStudio();
             loadGameStage();
