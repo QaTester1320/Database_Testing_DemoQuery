@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Schema Testing Hub</title>
+    <style>
+        /* Premium Matte Dark Aesthetics - Bahnschrift Typography Integration */
+        :root {
+            --bg-main: #0a0a0c;
+            --bg-card: #121215;
+            --bg-nested: #1a1a1f;
+            --border-color: #26262b;
+            --text-main: #e4e4e7;
+            --text-muted: #a1a1aa;
+            --accent-primary: #6366f1;
+            --accent-success: #10b981;
+            --accent-error: #f43f5e;
+            --accent-warning: #f59e0b;
+            --font-stack: 'Bahnschrift', 'Segoe UI', -apple-system, sans-serif;
+            --font-code: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            font-family: var(--font-stack);
+            font-weight: 500; /* Smooth presentation of Bahnschrift */
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .workspace {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        /* Header Dashboard Layout */
+        .dashboard-header {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-header {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        .header-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        .badge-system {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge span {
+            color: var(--accent-primary);
+        }
+
+        /* Section Layouts */
+        .section-headline {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 40px 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-headline::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            background-color: var(--accent-primary);
+            border-radius: 2px;
+        }
+
+        /* Grid Frameworks */
+        .grid-two-col {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 992px) {
+            .grid-two-col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* VISUAL DESK WRAPPER STYLES - RESPONSIVE BUILD */
+        .visual-desk-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 992px) {
+            .visual-desk-container {
+                grid-template-columns: 1.1fr 0.9fr;
+            }
+        }
+
+        .sheet-preview-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        .sheet-control-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .runtime-upload-btn {
+            background-color: var(--bg-nested);
+            border: 1px solid #3f3f46;
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .runtime-upload-btn:hover {
+            border-color: var(--accent-primary);
+            background-color: #22222a;
+        }
+
+        .sheet-image-frame {
+            background-color: var(--bg-nested);
+            border: 1px dashed #3f3f46;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 250px;
+            max-height: 320px;
+            overflow: auto;
+        }
+
+        .sheet-image-frame img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            object-fit: contain;
+        }
+
+        .graph-metrics-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        /* CSS BAR CHART ANIMATIONS */
+        .bar-chart-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .chart-row-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .chart-bar-bg {
+            background-color: var(--bg-nested);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            width: 0%; 
+            transition: width 1.5s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+
+        /* INTERACTIVE QUERY VISUALIZATION GRAPH */
+        .query-visualizer-graph {
+            margin-top: 20px;
+            background-color: #08080a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .graph-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--accent-primary);
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .db-visual-map {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 10px;
+            background: var(--bg-nested);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #222227;
+            font-family: var(--font-code);
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+
+        .db-node {
+            background-color: #121215;
+            border: 1px solid #3f3f46;
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-align: center;
+            min-width: 100px;
+            white-space: nowrap;
+        }
+
+        .db-node.highlight {
+            border-color: var(--accent-success);
+            background-color: rgba(16, 185, 129, 0.05);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+        }
+
+        .db-connector-arrow {
+            color: var(--text-muted);
+            font-weight: bold;
+            animation: arrowDrive 1.5s infinite linear;
+        }
+
+        @keyframes arrowDrive {
+            0% { opacity: 0.3; transform: translateX(-2px); }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; transform: translateX(2px); }
+        }
+
+        /* Interactive Dissector Lab Styling */
+        .lab-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .lab-container {
+                grid-template-columns: 320px 1fr;
+            }
+        }
+
+        .lab-sidebar {
+            background-color: #0e0e11;
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 550px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 768px) {
+            .lab-sidebar {
+                border-bottom: none;
+                border-right: 1px solid var(--border-color);
+            }
+        }
+
+        .tc-item {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            font-family: var(--font-stack);
+            font-weight: 600;
+        }
+
+        .tc-item:hover {
+            border-color: #4b4b52;
+            background-color: var(--bg-nested);
+        }
+
+        .tc-item.active {
+            border-color: var(--accent-primary);
+            background-color: rgba(99, 102, 241, 0.08);
+        }
+
+        .tc-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .tc-item-id {
+            font-family: var(--font-code);
+            font-weight: bold;
+            color: var(--accent-error);
+            font-size: 0.85rem;
+        }
+
+        .tc-item-priority {
+            font-size: 0.75rem;
+            background-color: #242429;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--text-muted);
+        }
+
+        .tc-item-title {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lab-view {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 768px) {
+            .lab-view {
+                padding: 30px;
+            }
+        }
+
+        .view-header h3 {
+            margin: 0 0 10px 0;
+            color: #ffffff;
+            font-size: 1.3rem;
+        }
+
+        .view-header p {
+            color: var(--text-muted);
+            margin: 0 0 25px 0;
+            font-size: 0.95rem;
+        }
+
+        /* SQL Display Box */
+        .sql-display-box {
+            background-color: #08080a;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-sizing: border-box;
+        }
+
+        .sql-interactive-line {
+            font-family: var(--font-code);
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .sql-token {
+            padding: 4px 8px;
+            border-radius: 4px;
+            background-color: var(--bg-nested);
+            border: 1px solid transparent;
+            cursor: help;
+            transition: all 0.2s ease;
+        }
+
+        .sql-token:hover {
+            border-color: var(--accent-primary);
+            background-color: #22222a;
+        }
+
+        .token-keyword { color: #f43f5e; }
+        .token-field { color: #60a5fa; }
+        .token-schema { color: #a7f3d0; }
+        .token-string { color: #f59e0b; }
+
+        .explanation-card {
+            background-color: var(--bg-nested);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            min-height: 100px;
+            box-sizing: border-box;
+        }
+
+        .explanation-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.95rem;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .explanation-card p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        /* Game Arena Layout */
+        .game-panel {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 768px) {
+            .game-panel {
+                padding: 30px;
+            }
+        }
+
+        .game-meta-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .game-stats-cluster {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-node {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .stat-node strong {
+            color: #ffffff;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 4px;
+            background-color: var(--bg-nested);
+            border-radius: 2px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 10%;
+            background-color: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .game-prompt {
+            font-size: 1.1rem;
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: 25px;
+            min-height: 55px;
+        }
+
+        .game-options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .game-opt-btn {
+            background-color: var(--bg-nested);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .game-opt-btn:hover {
+            border-color: #4b4b52;
+            background-color: #22222a;
+        }
+
+        /* Advanced Dynamic Correction Feedback Display */
+        .correction-box {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #1a1114;
+            border: 1px solid var(--accent-error);
+            font-size: 0.95rem;
+        }
+
+        .correction-box h5 {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            color: var(--accent-error);
+            font-weight: 700;
+        }
+
+        .correction-segment {
+            margin-bottom: 12px;
+        }
+
+        .correction-segment:last-child {
+            margin-bottom: 0;
+        }
+
+        .label-err { color: var(--accent-error); font-weight: bold; }
+        .label-ok { color: var(--accent-success); font-weight: bold; }
+
+        /* Virtual Terminal Simulator Console */
+        .virtual-terminal {
+            background-color: #050507;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: var(--font-code);
+            padding: 20px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+        }
+
+        .terminal-topbar {
+            color: #52525b;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 1px solid #18181b;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .terminal-log {
+            font-size: 0.9rem;
+            margin: 4px 0;
+            white-space: pre-wrap;
+        }
+
+        .term-input-line { color: var(--accent-primary); }
+        .term-output-line { color: var(--accent-success); margin-left: 15px; }
+
+        .action-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .primary-action-btn {
+            background-color: var(--accent-primary);
+            color: #ffffff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            transition: background-color 0.2s ease;
+            font-family: var(--font-stack);
+        }
+
+        .primary-action-btn:hover {
+            background-color: #4f46e5;
+        }
+
+        /* Fundamentals Card Blocks */
+        .core-concept-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-sizing: border-box;
+        }
+
+        .core-concept-card h3 {
+            color: #ffffff;
+            margin-top: 0;
+            font-size: 1.15rem;
+            margin-bottom: 12px;
+        }
+
+        .core-concept-card p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="workspace">
+        
+        <header class="dashboard-header">
+            <div class="header-title">
+                <h1>QA Database Schema Explorer</h1>
+                <p>Learn how to test database tables, columns, and rules using simple commands.</p>
+            </div>
+            <div class="badge-system">
+                <div class="badge">Rank: <span id="user-rank">QA Student</span></div>
+                <div class="badge">Accuracy: <span id="accuracy-stat">0%</span></div>
+            </div>
+        </header>
+
+        <h2 class="section-headline">1. Structural Testing Core Definitions</h2>
+        <div class="grid-two-col" style="margin-bottom: 30px;">
+            <div class="core-concept-card">
+                <h3>What is Database Schema Testing?</h3>
+                <p>Instead of checking the data rows inside a table, <strong>schema testing checks the structure itself</strong>. You are verifying if the tables exist, if columns have the correct names, if they accept the right type of data, and if rules like <em>"cannot be empty"</em> are working properly.</p>
+            </div>
+            <div class="core-concept-card">
+                <h3>What is information_schema?</h3>
+                <p>This is a <strong>built-in, read-only dictionary</strong> inside the database. It keeps track of the rules and blueprints for every single table and column you create. As a QA tester, you can query this dictionary to verify if developers built the database correctly according to requirements.</p>
+            </div>
+        </div>
+
+        <div class="visual-desk-container">
+            <div class="sheet-preview-card">
+                <div class="sheet-control-bar">
+                    <div>
+                        <h3 style="margin:0 0 3px 0; color:#fff; font-size:1.15rem;">Operational Data Testing Reference Blueprint</h3>
+                        <p style="margin:0; color:var(--text-muted); font-size:0.9rem;">Cross-reference matrix layout for end-to-end sandbox validation mapping matches.</p>
+                    </div>
+                    <div>
+                        <input type="file" id="sheet-image-uploader" accept="image/*" style="display: none;" onchange="handleRuntimeImageUpload(this)">
+                        <button class="runtime-upload-btn" onclick="document.getElementById('sheet-image-uploader').click()">Select Image File</button>
+                    </div>
+                </div>
+                <div class="sheet-image-frame" id="sheet-frame-box">
+                    <img id="runtime-sheet-img" src="image_ffd021.jpg" alt="Data Testing Scenario Reference Sheet Matrix" onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=\"color:var(--text-muted); text-align:center; padding:20px; font-size:0.95rem;\"><em>[image_ffd021.jpg not found locally yet. Click \"Select Image File\" above to load your sheet layout instantly into this window at runtime.]</em></div>';">
+                </div>
+            </div>
+
+            <div class="graph-metrics-card">
+                <div>
+                    <h3 style="margin:0 0 5px 0; color:#fff; font-size:1.15rem;">Schema Coverage Vectors</h3>
+                    <p style="margin:0; color:var(--text-muted); font-size:0.9rem;">Live visual summary of architectural rules verified in this system sandbox.</p>
+                    
+                    <div class="bar-chart-container">
+                        <div class="chart-row">
+                            <div class="chart-row-meta"><span>Table Presence &amp; Naming Rules</span><strong>100%</strong></div>
+                            <div class="chart-bar-bg"><div class="chart-bar-fill" id="bar-presence" style="background-color: var(--accent-success);"></div></div>
+                        </div>
+                        <div class="chart-row">
+                            <div class="chart-row-meta"><span>Column Constraints (Data Sizes/Types)</span><strong>85%</strong></div>
+                            <div class="chart-bar-bg"><div class="chart-bar-fill" id="bar-constraints" style="background-color: var(--accent-primary);"></div></div>
+                        </div>
+                        <div class="chart-row">
+                            <div class="chart-row-meta"><span>Key Configuration Audits</span><strong>70%</strong></div>
+                            <div class="chart-bar-bg"><div class="chart-bar-fill" id="bar-keys" style="background-color: var(--accent-warning);"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-headline">2. Interactive Query Dissector Laboratory</h2>
+        <p style="color: var(--text-muted); margin-top: -10px; margin-bottom: 20px; font-size: 0.95rem;">Click a Test Case on the left sidebar to see its query. Then, hover or click on different parts of the query to see exactly what they mean in plain English.</p>
+        
+        <div class="lab-container">
+            <div class="lab-sidebar" id="lab-sidebar-target">
+                </div>
+
+            <div class="lab-view">
+                <div class="view-header">
+                    <h3 id="lab-title">Loading Schema Target...</h3>
+                    <p id="lab-desc">Select an available scenario token from the sidebar to inspect structural components.</p>
+                    
+                    <div class="sql-display-box">
+                        <div class="sql-interactive-line" id="sql-token-target">
+                            </div>
+                    </div>
+                </div>
+
+                <div class="explanation-card">
+                    <h4 id="exp-title">Component Breakdown Analysis</h4>
+                    <p id="exp-body">Select or hover over any highlighted segment of the query above to review structural context assignments.</p>
+                    
+                    <div class="query-visualizer-graph">
+                        <div class="graph-title">Query Execution Mapping Graph</div>
+                        <div class="db-visual-map" id="query-graph-map-target">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-headline">3. Interactive 10-Stage QA Sandbox Arena</h2>
+        
+        <div class="grid-two-col">
+            <div class="game-panel">
+                <div>
+                    <div class="game-meta-bar">
+                        <div class="stat-node">Question: <strong id="game-stage-num">1</strong> of 10</div>
+                        <div class="game-stats-cluster">
+                            <div class="stat-node">Streak: <strong id="game-streak">0</strong></div>
+                            <div class="stat-node">Score: <strong id="game-score">0</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-track">
+                        <div class="progress-bar-fill" id="game-progress-fill"></div>
+                    </div>
+
+                    <div class="game-prompt" id="game-prompt-target">
+                        Loading verification target scenario...
+                    </div>
+
+                    <div class="game-options-grid" id="game-options-target">
+                        </div>
+                </div>
+
+                <div class="action-container">
+                    <button class="primary-action-btn" id="game-next-btn" onclick="triggerNextGameStep()">Next Question</button>
+                </div>
+            </div>
+
+            <div class="virtual-terminal">
+                <div class="terminal-topbar">Simulated Live Database Output Console</div>
+                <div id="terminal-log-target" style="flex-grow: 1;">
+                    <div class="terminal-log"><span class="term-input-line">QA-Terminal$</span> Database system online. Awaiting query run...</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // MASTER TEST CASE SCHEMA DATABASE DATA - BASIC ENGLISH REWRITE
+        const schemaTestCases = [
+            {
+                id: "TC001",
+                title: "Check if table exists",
+                desc: "Verifies that your required table was actually created inside the database before you try to run any automation or manual data tests.",
+                priority: "High",
+                graphMap: [
+                    {name: "Database Engine", highlight: false},
+                    {name: "SHOW TABLES", highlight: true},
+                    {name: "Output List", highlight: false}
+                ],
+                tokens: [
+                    { text: "SHOW", type: "keyword", desc: "A command that tells the database to list out its structure components." },
+                    { text: "TABLES;", type: "keyword", desc: "Tells the database to specifically list the names of all tables inside it." }
+                ]
+            },
+            {
+                id: "TC002",
+                title: "Check table naming conventions",
+                desc: "Checks if the table names follow standard project rules (for example: using lowercase letters, singular words, and no spaces).",
+                priority: "Medium",
+                graphMap: [
+                    {name: "Style Guide Rules", highlight: false},
+                    {name: "SHOW TABLES", highlight: true},
+                    {name: "Naming Review", highlight: false}
+                ],
+                tokens: [
+                    { text: "SHOW", type: "keyword", desc: "Tells the system to display structural information." },
+                    { text: "TABLES;", type: "keyword", desc: "Brings up the list of table names so you can manually or automatically check if they follow proper naming rules." }
+                ]
+            },
+            {
+                id: "TC003",
+                title: "Check total number of columns",
+                desc: "Checks if the total number of columns in the database table matches the design document (for example, checking if it has exactly 13 columns).",
+                priority: "High",
+                graphMap: [
+                    {name: "information_schema.columns", highlight: false},
+                    {name: "COUNT(*)", highlight: true},
+                    {name: "Target: 'customers'", highlight: true}
+                ],
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Tells the database you want to retrieve or read some data." },
+                    { text: "COUNT(*)", type: "field", desc: "Counts every item that matches your search filter." },
+                    { text: "AS NumberOfColumns", type: "field", desc: "Gives the output column a clean, friendly name so your test report looks easy to read." },
+                    { text: "FROM", type: "keyword", desc: "Points to the location where you want to read information from." },
+                    { text: "information_schema.columns", type: "schema", desc: "The built-in system dictionary table that stores tracking rules for all columns across the database." },
+                    { text: "WHERE", type: "keyword", desc: "Filters the results so you don't get information for every single table." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Limits the count strictly to the table named 'customers'." }
+                ]
+            },
+            {
+                id: "TC004",
+                title: "Check actual column names",
+                desc: "Pulls a list of all column headers in a table to verify they match the spelling and format in the requirement documents.",
+                priority: "High",
+                graphMap: [
+                    {name: "information_schema", highlight: false},
+                    {name: "column_name", highlight: true},
+                    {name: "Filter: 'customers'", highlight: false}
+                ],
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Starts the request to read information from the database." },
+                    { text: "column_name", type: "field", desc: "Specifies that you only want to pull the actual text names of the columns." },
+                    { text: "FROM", type: "keyword", desc: "Points to the system layout dictionary table." },
+                    { text: "information_schema.columns", type: "schema", desc: "The built-in master directory tracking column structures." },
+                    { text: "WHERE", type: "keyword", desc: "Filters your search request." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Tells the system to only look at columns inside the 'customers' table." }
+                ]
+            },
+            {
+                id: "TC005",
+                title: "Check column data types",
+                desc: "Verifies if the data types match the fields (for example: checking if a User ID column only accepts numbers, and a Name column accepts text).",
+                priority: "High",
+                graphMap: [
+                    {name: "column_name", highlight: false},
+                    {name: "data_type [int / varchar]", highlight: true},
+                    {name: "Target Table", highlight: false}
+                ],
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Starts your request to view specific database fields." },
+                    { text: "column_name,", type: "field", desc: "Pulls the name of the column header." },
+                    { text: "data_type", type: "field", desc: "Pulls the rule type assigned to that column (like 'int' for numbers or 'varchar' for words)." },
+                    { text: "FROM", type: "keyword", desc: "Points to the structural reference dictionary." },
+                    { text: "information_schema.columns", type: "schema", desc: "The built-in table that tracks all database column properties." },
+                    { text: "WHERE", type: "keyword", desc: "Filters your search query rows." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Limits the check strictly to the layout of the 'customers' table." }
+                ]
+            },
+            {
+                id: "TC006",
+                title: "Check column size/length limits",
+                desc: "Checks if columns have proper size limits set so that long user inputs do not crash the system or get cut off unexpectedly.",
+                priority: "Medium",
+                graphMap: [
+                    {name: "Columns System", highlight: false},
+                    {name: "column_type [varchar(255)]", highlight: true},
+                    {name: "Size Validation", highlight: true}
+                ],
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Tells the database to read out specific layout data fields." },
+                    { text: "column_name,", type: "field", desc: "Pulls the name of the table columns." },
+                    { text: "column_type", type: "field", desc: "Displays both the data type and the max size limit together (for example: showing 'varchar(255)' explicitly)." },
+                    { text: "FROM", type: "keyword", desc: "Points to the system directory path." },
+                    { text: "information_schema.columns", type: "schema", desc: "The built-in master table that stores column properties." },
+                    { text: "WHERE", type: "keyword", desc: "Sets a search filter condition." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Restricts the output data strictly to the 'customers' table." }
+                ]
+            },
+            {
+                id: "TC007",
+                title: "Check for nullable fields",
+                desc: "Verifies which columns are allowed to be left empty (NULL) and which columns must always contain data (NOT NULL).",
+                priority: "High",
+                graphMap: [
+                    {name: "Field Meta", highlight: false},
+                    {name: "is_nullable [YES/NO]", highlight: true},
+                    {name: "Null Rule Audit", highlight: false}
+                ],
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Asks the system to display specific structural metrics." },
+                    { text: "column_name,", type: "field", desc: "Pulls the names of the columns." },
+                    { text: "is_nullable", type: "field", desc: "Pulls the rule status (Outputs 'YES' if it can be left blank, or 'NO' if it is mandatory)." },
+                    { text: "FROM", type: "keyword", desc: "Points to the system properties layout tracker." },
+                    { text: "information_schema.columns", type: "schema", desc: "The built-in framework table that tracks all column configurations." },
+                    { text: "WHERE", type: "keyword", desc: "Filters the layout data check." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Tells the system to only show column rules for the 'customers' table." }
+                ]
+            },
+            {
+                id: "TC008",
+                title: "Check column keys indices",
+                desc: "Verifies if the correct column is configured as the Primary Key (the main unique identifier for that table).",
+                priority: "High",
+                graphMap: [
+                    {name: "Metadata Table", highlight: false},
+                    {name: "column_key [PRI]", highlight: true},
+                    {name: "Constraint Lock", highlight: false}
+                ],
+                tokens: [
+                    { text: "SELECT", type: "keyword", desc: "Instructs the system to read configuration properties." },
+                    { text: "column_name,", type: "field", desc: "Selects the specific column name headers." },
+                    { text: "column_key", type: "field", desc: "Displays the key rule setting (for example: showing 'PRI' if it is the main Primary Key)." },
+                    { text: "FROM", type: "keyword", desc: "Points to the system blueprint tracking table." },
+                    { text: "information_schema.columns", type: "schema", desc: "The internal database directory storing all column configurations." },
+                    { text: "WHERE", type: "keyword", desc: "Filters the search results." },
+                    { text: "table_name = 'customers';", type: "string", desc: "Limits the lookup strictly to the keys inside the 'customers' table." }
+                ]
+            }
+        ];
+
+        // 10-STAGE GAME DATA REWRITTEN TO BASIC ENGLISH WITH EXPLICIT WHY/WHAT REASONING
+        const arenaQuestions = [
+            {
+                q: "Your test plan says you need to check if a new table called 'orders' was actually created in the database. Which simple query lists all existing tables?",
+                options: ["SELECT * FROM information_schema.tables;", "SHOW TABLES;", "SELECT column_name FROM information_schema.columns;"],
+                correct: 1,
+                cmd: "SHOW TABLES;",
+                out: "+-------------------+\n| Tables_in_sandbox |\n+-------------------+\n| customers         |\n| orders            |\n+-------------------+",
+                reasons: [
+                    "This query extracts rows from the back-end system table catalog. While technically possible, it produces an over-complicated structural report and is considered an incorrect approach for a basic presence test case.",
+                    "The simplest, most direct way to check table presence is using the standard command statement. It prints a simple, human-readable list of all active tables.",
+                    "This query isolates and prints out individual column header names. It does not help you view a high-level list of tables."
+                ]
+            },
+            {
+                q: "The company style guide says all database table names must use small letters and no spaces. Which command do you run to print out the table names list so you can check them?",
+                options: ["SELECT schema_name FROM information_schema.schemata;", "SHOW TABLES;", "DESCRIBE customers;"],
+                correct: 1,
+                cmd: "SHOW TABLES;",
+                out: "+-------------------+\n| Tables_in_sandbox |\n+-------------------+\n| customers         |\n| orders            |\n+-------------------+",
+                reasons: [
+                    "This statement checks the higher-level database schema names (the project workspaces), not the names of the tables inside those workspaces.",
+                    "By running this command, you print all table titles side-by-side to verify if any names contain spaces or forbidden capital letters.",
+                    "This command displays inside properties for one specific table named 'customers'. It does not give you a full list of all table names."
+                ]
+            },
+            {
+                q: "The design document says the 'customers' table must have exactly 13 total columns. Which query counts the columns and gives you a single total number?",
+                options: ["SELECT COUNT(*) AS NumberOfColumns FROM information_schema.columns WHERE table_name = 'customers';", "SELECT SUM(columns) FROM information_schema.tables;", "SHOW COLUMNS FROM customers;"],
+                correct: 0,
+                cmd: "SELECT COUNT(*) AS NumberOfColumns FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-----------------+\n| NumberOfColumns |\n+-----------------+\n|              13 |\n+-----------------+",
+                reasons: [
+                    "By using the mathematical aggregate function combined with a specific table name filter, the database counts the rows in the system dictionary and prints the exact number of column definitions.",
+                    "This query is invalid syntax because there is no column named 'columns' that you can perform a sum addition on inside the system table catalog.",
+                    "This statement displays a detailed list of the columns, but it forces your automation code to count them manually one by one instead of returning a clean single total number."
+                ]
+            },
+            {
+                q: "You want to confirm that a developer successfully changed a column header name from 'phone' to 'phone_number'. Which query pulls a list of just the column names?",
+                options: ["SHOW SCHEMA NAMES;", "SELECT column_name FROM information_schema.columns WHERE table_name = 'customers';", "SELECT * FROM customers;"],
+                correct: 1,
+                cmd: "SELECT column_name FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-----------------+\n| column_name     |\n+-----------------+\n| customer_id     |\n| email           |\n| phone_number    |\n+-----------------+",
+                reasons: [
+                    "This is an invalid command statement that does not exist in relational SQL databases.",
+                    "This selects the specific text parameter tracking column names from the global layout dictionary, filtering down strictly to your target table name.",
+                    "This command reads the actual data records (like real customer profiles) from the database table. It does not inspect the system blueprint properties."
+                ]
+            },
+            {
+                q: "You notice an automated test is failing because text characters are causing errors in an ID field. Which query shows you the data types of columns so you can verify if a column is set to numbers (int) or text (varchar)?",
+                options: ["SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'customers';", "SELECT data_type FROM customers;", "SHOW DATA_TYPES;"],
+                correct: 0,
+                cmd: "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-------------+-----------+\n| column_name | data_type |\n+-------------+-----------+\n| customer_id | int       |\n| email       | varchar   |\n+-------------+-----------+",
+                reasons: [
+                    "This query targets the column rules dictionary and brings back the column names alongside their formal structural validation rules (like integer or text string configurations).",
+                    "You cannot select structural rules directly from operational data tables. The 'customers' table only holds customer data rows, not the blueprint rules.",
+                    "This is an invalid database command. Database systems do not have a universal command to show all types globally like this."
+                ]
+            },
+            {
+                q: "The functional specification says the 'first_name' column must have a maximum size limit of 255 characters. Which query shows you the column names alongside their exact maximum length constraints?",
+                options: ["SELECT length FROM customers;", "SELECT column_name, column_type FROM information_schema.columns WHERE table_name = 'customers';", "SHOW MAX_LENGTH;"],
+                correct: 1,
+                cmd: "SELECT column_name, column_type FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-------------+--------------+\n| column_name | column_type  |\n+-------------+--------------+\n| first_name  | varchar(255) |\n+-------------+--------------+",
+                reasons: [
+                    "There is no standard column property field called 'length' stored inside individual production data tables.",
+                    "By reading the specific property tracking parameters, the database outputs the full configuration rule, revealing the exact maximum size boundaries like 'varchar(255)'.",
+                    "This is an unrecognized database syntax command and will cause an execution parser error."
+                ]
+            },
+            {
+                q: "An automated sign-up test fails because the database rejects an entry when a user leaves the 'middle_name' field blank. Which query checks if a column is allowed to be empty (nullable)?",
+                options: ["SELECT column_name, is_nullable FROM information_schema.columns WHERE table_name = 'customers';", "SHOW EMPTY FIELDS FROM customers;", "SELECT null_status FROM information_schema.tables;"],
+                correct: 0,
+                cmd: "SELECT column_name, is_nullable FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-------------+-------------+\n| column_name | is_nullable |\n+-------------+-------------+\n| customer_id | NO          |\n| middle_name | YES         |\n+-------------+-------------+",
+                reasons: [
+                    "This query extracts the boolean property flag which explicitly outputs 'YES' or 'NO' to confirm if empty entries are permitted.",
+                    "This is incorrect pseudo-code. Database tools do not understand a command statement structured this way.",
+                    "The system table catalog tracks generic metrics for full tables. It does not store individual cell nullable rule details."
+                ]
+            },
+            {
+                q: "You need to verify if the 'customer_id' column is properly set up as the Primary Key (main unique identifier) for the table. Which query checks for column keys?",
+                options: ["SELECT key_type FROM customers;", "SHOW ALL KEYS;", "SELECT column_name, column_key FROM information_schema.columns WHERE table_name = 'customers';"],
+                correct: 2,
+                cmd: "SELECT column_name, column_key FROM information_schema.columns WHERE table_name = 'customers';",
+                out: "+-------------+------------+\n| column_name | column_key |\n+-------------+------------+\n| customer_id | PRI        |\n| email       | UNI        |\n+-------------+------------+",
+                reasons: [
+                    "The field properties are not stored within the customer data records table itself.",
+                    "This statement is not a recognized SQL keyword command pattern.",
+                    "This query requests structural constraint indices from the metadata column log, checking if the identifier shows 'PRI' for Primary Key or 'UNI' for Unique Key rules."
+                ]
+            },
+            {
+                q: "Why is it important to include `WHERE table_name = 'customers'` at the end of your schema queries?",
+                options: ["It writes new test records inside that table.", "It ensures you only get the structure details for that specific table, instead of mixing data from all tables.", "It deletes structural details from other conflicting tables."],
+                correct: 1,
+                cmd: "-- Table filter verification --",
+                out: "Result: Output limited strictly to the 'customers' table layout.",
+                reasons: [
+                    "This is incorrect. A filtering rule condition cannot create or inject new database records.",
+                    "Because the system dictionary tracks columns for every single table in the database together, you must use this condition to isolate the parameters down to your single target test table.",
+                    "This is a safe read-only filtering command. It never alters, deletes, or changes any table architectures."
+                ]
+            },
+            {
+                q: "What is the main role of the `information_schema` workspace in database structure testing?",
+                options: ["It acts as a storage backup system for historical user transaction logs.", "It serves as a direct cache memory to speed up user account login views.", "It functions as a read-only dictionary that holds all structural layout rules and blueprints for your database tables."],
+                correct: 2,
+                cmd: "-- Final Audit Complete --",
+                out: "System Check: All 10 structure validation rules match verification protocols perfectly.",
+                reasons: [
+                    "It does not store operational transaction data logs or database application backup files.",
+                    "It has no role in managing runtime application cache layers or speeding up security logins.",
+                    "It is the central metadata repository that acts as an accessible system blueprint, letting testers check exact schema parameters dynamically."
+                ]
+            }
+        ];
+
+        // LOGIC LAB ENGINE STATES
+        let currentActiveLabIndex = 0;
+        let gameStageIdx = 0;
+        let gameScore = 0;
+        let gameStreak = 0;
+        let runningAnswersCount = 0;
+        let runningCorrectCount = 0;
+
+        // LOCAL RUNTIME IMAGE FILE LOAD LOADER
+        function handleRuntimeImageUpload(inputField) {
+            if (inputField.files && inputField.files[0]) {
+                const imgReader = new FileReader();
+                imgReader.onload = function(e) {
+                    const frame = document.getElementById("sheet-frame-box");
+                    frame.innerHTML = `<img id="runtime-sheet-img" src="${e.target.result}" alt="Data Testing Scenario Reference Sheet Matrix">`;
+                };
+                imgReader.readAsDataURL(inputField.files[0]);
+            }
+        }
+
+        // LAB ENGINE FUNCTIONS
+        function initializeLabStudio() {
+            const sidebarTarget = document.getElementById("lab-sidebar-target");
+            sidebarTarget.innerHTML = "";
+
+            schemaTestCases.forEach((tc, idx) => {
+                const element = document.createElement("button");
+                element.className = `tc-item ${idx === currentActiveLabIndex ? 'active' : ''}`;
+                element.onclick = () => mountLabTestCase(idx);
+                element.innerHTML = `
+                    <div class="tc-item-header">
+                        <span class="tc-item-id">${tc.id}</span>
+                        <span class="tc-item-priority">${tc.priority}</span>
+                    </div>
+                    <div class="tc-item-title">${tc.title}</div>
+                `;
+                sidebarTarget.appendChild(element);
+            });
+
+            mountLabTestCase(currentActiveLabIndex);
+            
+            // Soft-trigger fluid graph filling sequence
+            setTimeout(() => {
+                document.getElementById("bar-presence").style.width = "100%";
+                document.getElementById("bar-constraints").style.width = "85%";
+                document.getElementById("bar-keys").style.width = "70%";
+            }, 300);
+        }
+
+        function mountLabTestCase(index) {
+            currentActiveLabIndex = index;
+            
+            const items = document.querySelectorAll(".tc-item");
+            items.forEach((item, idx) => {
+                if(idx === index) item.classList.add("active");
+                else item.classList.remove("active");
+            });
+
+            const targetCase = schemaTestCases[index];
+            document.getElementById("lab-title").innerText = `${targetCase.id}: ${targetCase.title}`;
+            document.getElementById("lab-desc").innerText = targetCase.desc;
+
+            const tokensTarget = document.getElementById("sql-token-target");
+            tokensTarget.innerHTML = "";
+
+            targetCase.tokens.forEach(tok => {
+                const tokenNode = document.createElement("span");
+                tokenNode.className = `sql-token token-${tok.type}`;
+                tokenNode.innerText = tok.text;
+                tokenNode.onmouseover = () => updateTokenExplainer(tok.text, tok.desc);
+                tokenNode.onclick = () => updateTokenExplainer(tok.text, tok.desc);
+                tokensTarget.appendChild(tokenNode);
+            });
+
+            // RENDER INTERACTIVE CSS GRAPH EXPLANATION MAP
+            const graphMapTarget = document.getElementById("query-graph-map-target");
+            graphMapTarget.innerHTML = "";
+            if(targetCase.graphMap) {
+                targetCase.graphMap.forEach((node, nIdx) => {
+                    const nodeDiv = document.createElement("div");
+                    nodeDiv.className = `db-node ${node.highlight ? 'highlight' : ''}`;
+                    nodeDiv.innerText = node.name;
+                    graphMapTarget.appendChild(nodeDiv);
+                    
+                    if(nIdx < targetCase.graphMap.length - 1) {
+                        const arrowDiv = document.createElement("div");
+                        arrowDiv.className = "db-connector-arrow";
+                        arrowDiv.innerText = "➔";
+                        graphMapTarget.appendChild(arrowDiv);
+                    }
+                });
+            }
+
+            updateTokenExplainer(targetCase.tokens[0].text, targetCase.tokens[0].desc);
+        }
+
+        function updateTokenExplainer(title, systemDescription) {
+            document.getElementById("exp-title").innerText = `Query Part: ${title}`;
+            document.getElementById("exp-body").innerText = systemDescription;
+        }
+
+        // SANDBOX GAME ARENA ENGINE LOGIC
+        function loadGameStage() {
+            document.getElementById("game-next-btn").style.display = "none";
+            const dataNode = arenaQuestions[gameStageIdx];
+            
+            document.getElementById("game-stage-num").innerText = gameStageIdx + 1;
+            document.getElementById("game-progress-fill").style.width = `${((gameStageIdx + 1) / arenaQuestions.length) * 100}%`;
+            document.getElementById("game-prompt-target").innerText = dataNode.q;
+
+            const optionsTarget = document.getElementById("game-options-target");
+            optionsTarget.innerHTML = "";
+
+            dataNode.options.forEach((opt, idx) => {
+                const choiceBtn = document.createElement("button");
+                choiceBtn.className = "game-opt-btn";
+                choiceBtn.innerText = opt;
+                choiceBtn.onclick = () => processGameAnswer(idx, choiceBtn);
+                optionsTarget.appendChild(choiceBtn);
+            });
+        }
+
+        function processGameAnswer(userChoiceIdx, interfaceButton) {
+            const currentQuestion = arenaQuestions[gameStageIdx];
+            const choicesButtons = document.querySelectorAll(".game-opt-btn");
+            const optionsTarget = document.getElementById("game-options-target");
+            
+            choicesButtons.forEach(btn => btn.disabled = true);
+
+            runningAnswersCount++;
+
+            const consoleLogTarget = document.getElementById("terminal-log-target");
+            consoleLogTarget.innerHTML = `
+                <div class="terminal-log"><span class="term-input-line">QA-Terminal$</span> ${currentQuestion.cmd}</div>
+                <div class="terminal-log term-output-line">${currentQuestion.out}</div>
+            `;
+
+            if(userChoiceIdx === currentQuestion.correct) {
+                gameScore += 100 + (gameStreak * 20);
+                gameStreak++;
+                runningCorrectCount++;
+                
+                interfaceButton.style.borderColor = varCssAccessor('--accent-success');
+                interfaceButton.style.backgroundColor = "rgba(16, 185, 129, 0.1)";
+                
+                consoleLogTarget.innerHTML += `<div class="terminal-log" style="color: var(--accent-success);">[PASS]: Structure verified successfully. The rules match the specifications.</div>`;
+                
+                const passBox = document.createElement("div");
+                passBox.className = "correction-box";
+                passBox.style.borderColor = varCssAccessor('--accent-success');
+                passBox.style.backgroundColor = "#111a15";
+                passBox.innerHTML = `
+                    <h5 style="color: var(--accent-success);">✔ Verification Passed!</h5>
+                    <div class="correction-segment">
+                        <span class="label-ok">Why it is correct:</span> ${currentQuestion.reasons[currentQuestion.correct]}
+                    </div>
+                `;
+                optionsTarget.appendChild(passBox);
+            } else {
+                gameStreak = 0;
+                interfaceButton.style.borderColor = varCssAccessor('--accent-error');
+                interfaceButton.style.backgroundColor = "rgba(244, 63, 94, 0.1)";
+                
+                consoleLogTarget.innerHTML += `<div class="terminal-log" style="color: var(--accent-error);">[FAIL]: Assertion error. This query does not pull the correct rule metrics for this requirement.</div>`;
+                
+                const correctionBox = document.createElement("div");
+                correctionBox.className = "correction-box";
+                correctionBox.innerHTML = `
+                    <h5>✘ Requirement Discrepancy Found</h5>
+                    <div class="correction-segment">
+                        <span class="label-err">Why your answer is incorrect:</span> 
+                        <em>${currentQuestion.reasons[userChoiceIdx]}</em>
+                    </div>
+                    <div class="correction-segment">
+                        <span class="label-ok">Correct Statement:</span> 
+                        <code style="background-color: #000; color: #34d399; font-family: var(--font-code); padding: 2px 6px; border-radius: 4px;">${currentQuestion.options[currentQuestion.correct]}</code>
+                    </div>
+                    <div class="correction-segment">
+                        <span class="label-ok">Why it is correct:</span> 
+                        <strong>${currentQuestion.reasons[currentQuestion.correct]}</strong>
+                    </div>
+                `;
+                optionsTarget.appendChild(correctionBox);
+            }
+
+            document.getElementById("game-score").innerText = gameScore;
+            document.getElementById("game-streak").innerText = gameStreak;
+            document.getElementById("accuracy-stat").innerText = `${Math.round((runningCorrectCount / runningAnswersCount) * 100)}%`;
+            
+            updateDynamicRankTitle();
+
+            document.getElementById("game-next-btn").style.display = "block";
+        }
+
+        function triggerNextGameStep() {
+            gameStageIdx++;
+            if(gameStageIdx < arenaQuestions.length) {
+                loadGameStage();
+            } else {
+                document.getElementById("game-prompt-target").innerText = "Database Structure Quiz Route Completed!";
+                document.getElementById("game-options-target").innerHTML = `
+                    <div style="padding: 20px; border-radius: 8px; background-color: rgba(16, 185, 129, 0.05); border: 1px dashed var(--accent-success); color: #ffffff;">
+                        Great job! You finished all 10 stages. Your final testing score is ${gameScore} points. Keep interacting with the Query Dissector panel above to practice reading column metadata.
+                    </div>
+                `;
+                document.getElementById("game-next-btn").style.display = "none";
+            }
+        }
+
+        function updateDynamicRankTitle() {
+            let activeRank = "QA Student";
+            if (gameScore >= 800) activeRank = "Database QA Specialist";
+            else if (gameScore >= 500) activeRank = "Senior Structure Checker";
+            else if (gameScore >= 200) activeRank = "Query Inspector";
+            
+            document.getElementById("user-rank").innerText = activeRank;
+        }
+
+        function varCssAccessor(variableStringName) {
+            return getComputedStyle(document.documentElement).getPropertyValue(variableStringName).trim();
+        }
+
+        window.onload = () => {
+            initializeLabStudio();
+            loadGameStage();
+        };
+    </script>
+</body>
+</html>
